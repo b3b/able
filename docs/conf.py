@@ -278,3 +278,18 @@ def no_op_wraps(func):
     return wrapper
 
 functools.wraps = no_op_wraps
+
+
+# http://docs.readthedocs.io/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules
+# I get import errors on libraries that depend on C modules
+from mock import MagicMock
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+            return MagicMock()
+
+MOCK_MODULES = ['kivy', 'kivy.utils', 'kivy.clock', 'kivy.logger',
+                'kivy.event']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+sys.modules['kivy.event'].EventDispatcher = object

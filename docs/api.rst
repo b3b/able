@@ -1,10 +1,10 @@
 .. automodule:: able
+
 API
 ---
 
 Classes
 ~~~~~~~
-
 
 .. autoclass:: BluetoothDispatcher
    :members: gatt,
