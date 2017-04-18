@@ -27,3 +27,5 @@ Bluetooth permissions should be requested in buildozer.spec::
 
     android.permissions = BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_COARSE_LOCATION
 
+
+App configuration example: `buildozer.spec <https://github.com/b3b/able/tree/master/examples/alert/buildozer.spec>`_
