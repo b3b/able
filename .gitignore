@@ -1,0 +1,9 @@
+.buildozer/
+bin/
+docs/_build/
+*~
+*.swp
+*.sublime-workspace
+*.pyo
+*.pyc
+*.so
