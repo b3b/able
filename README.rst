@@ -9,7 +9,7 @@ Generated documentation: http://able.readthedocs.org
 Build
 -----
 
-The following instructions are for building app with `buildozer <https://github.com/kivy/buildozer/>`_ tool (buildozer android_new).
+The following instructions are for building app with `buildozer <https://github.com/kivy/buildozer/>`_ tool.
 
 Download the `able` recipes directory: https://github.com/b3b/able/tree/master/recipes .
 
