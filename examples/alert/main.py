@@ -1,8 +1,10 @@
 """Turn the alert on Mi Band device
 """
-from able import BluetoothDispatcher, GATT_SUCCESS
 from kivy.app import App
 from kivy.uix.button import Button
+
+from able import BluetoothDispatcher, GATT_SUCCESS
+from error_message import install_exception_handler
 
 
 class BLE(BluetoothDispatcher):
@@ -46,11 +48,17 @@ class BLE(BluetoothDispatcher):
 
 
 class AlertApp(App):
-    ble = BLE()
 
     def build(self):
-        return Button(text='Alert Mi', on_press=self.ble.start_alert)
+        self.ble = None
+        return Button(text='Press to Alert Mi', on_press=self.start_alert)
+
+    def start_alert(self, *args, **kwargs):
+        if not self.ble:
+            self.ble = BLE()
+        self.ble.start_alert()
 
 
 if __name__ == '__main__':
+    install_exception_handler()
     AlertApp().run()

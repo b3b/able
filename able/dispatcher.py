@@ -3,13 +3,24 @@ from kivy.event import EventDispatcher
 from kivy.logger import Logger
 
 
+class BLEError(object):
+    """raise Exception on attribute access
+    """
+
+    def __init__(self, msg):
+        self.msg = msg
+
+    def __getattr__(self, name):
+        raise Exception(self.msg)
+
+
 class BluetoothDispatcherBase(EventDispatcher):
     __events__ = (
         'on_device', 'on_scan_started', 'on_scan_completed', 'on_services',
         'on_connection_state_change', 'on_characteristic_changed',
         'on_characteristic_read', 'on_characteristic_write',
         'on_descriptor_read', 'on_descriptor_write',
-        'on_gatt_release',
+        'on_gatt_release', 'on_error',
     )
     queue_class = BLEQueue
 
@@ -21,7 +32,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         self.enable_ble_code = enable_ble_code
 
     def _set_ble_interface(self):
-        pass
+        self._ble = BLEError('BLE is not implemented for platform')
 
     def _set_queue(self):
         self.queue = self.queue_class(timeout=self.queue_timeout)
@@ -112,6 +123,14 @@ class BluetoothDispatcherBase(EventDispatcher):
         :param characteristic: BluetoothGattCharacteristic Java object
         """
         self._ble.readCharacteristic(characteristic)
+
+    def on_error(self, msg):
+        """Error handler
+
+        :param msg: error message
+        """
+        self._ble = BLEError(msg)  # Exception for calls from another threads
+        raise Exception(msg)
 
     @ble_task_done
     def on_gatt_release(self):

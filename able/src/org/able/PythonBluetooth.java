@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothGattDescriptor;
 
 interface PythonBluetooth
 {
+        public void on_error(String msg);
         public void on_device(BluetoothDevice device, int rssi, byte[] record);
         public void on_scan_started(boolean success);
         public void on_scan_completed();

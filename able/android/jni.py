@@ -12,6 +12,11 @@ class PythonBluetooth(PythonJavaClass):
         super(PythonBluetooth, self).__init__()
         self.dispatcher = dispatcher
 
+    @java_method('(Ljava/lang/String;)V')
+    def on_error(self, msg):
+        Logger.debug("on_error")
+        self.dispatcher.dispatch('on_error', msg)
+
     @java_method('(Landroid/bluetooth/BluetoothDevice;I[B)V')
     def on_device(self, device, rssi, record):
         self.dispatcher.dispatch('on_device', device, rssi,

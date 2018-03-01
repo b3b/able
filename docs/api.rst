@@ -18,6 +18,7 @@ Classes
              write_descriptor,
              write_characteristic,
              read_characteristic,
+             on_error,
              on_gatt_release,
              on_scan_started,
              on_scan_completed,

@@ -3,6 +3,7 @@ package org.able;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothDevice;
@@ -28,10 +29,21 @@ public class BLE {
         private List<BluetoothGattService> mBluetoothGattServices;
         private boolean mScanning;
 
+        public void showError(final String msg) {
+                Log.d(TAG, msg);
+                PythonActivity.mActivity.toastError(TAG + " error. " + msg);
+                mPython.on_error(msg);
+        }
+
         public BLE(PythonBluetooth python) {
                 mPython = python;
                 mContext = (Context) PythonActivity.mActivity;
                 mBluetoothGatt = null;
+
+                if (!mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+                        showError("Device do not support Bluetooth Low Energy.");
+                        return;
+                }
 
                 final BluetoothManager bluetoothManager =
                         (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -44,7 +56,11 @@ public class BLE {
 
         public void startScan(int EnableBtCode) {
                 Log.d(TAG, "startScan");
-                if (mBluetoothAdapter == null || !mBluetoothAdapter.isEnabled()) {
+                if (mBluetoothAdapter == null) {
+                        showError("Device do not support Bluetooth Low Energy.");
+                        return;
+                }
+                if (!mBluetoothAdapter.isEnabled()) {
                         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                         PythonActivity.mActivity.startActivityForResult(enableBtIntent, EnableBtCode);
                         return;
@@ -112,7 +128,7 @@ public class BLE {
                                         Log.d(TAG, "onServicesDiscovered - success");
                                         mBluetoothGattServices = mBluetoothGatt.getServices();
                                 } else {
-                                        Log.d(TAG, "onServicesDiscovered status:" + status);
+                                        showError("onServicesDiscovered status:" + status);
                                         mBluetoothGattServices = null;
                                 }
                                 mPython.on_services(status, mBluetoothGattServices);
