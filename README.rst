@@ -20,7 +20,7 @@ Path to recipes directory should be set in buildozer.spec::
 
 `able` recipe should be added to buildozer.spec requirements::
 
-   requirements = hostpython2,kivy,android,able
+   requirements = python3,kivy,android,able
 
 
 Bluetooth permissions should be requested in buildozer.spec::
