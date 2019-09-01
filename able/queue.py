@@ -1,6 +1,9 @@
 import threading
 from functools import wraps, partial
-import Queue
+try:
+    from queue import Empty, Queue
+except ImportError:
+    from Queue import Empty, Queue
 from kivy.clock import Clock
 from kivy.logger import Logger
 
@@ -41,7 +44,7 @@ class BLEQueue(object):
     def __init__(self, timeout=0):
         self.lock = threading.Lock()
         self.ready = True
-        self.queue = Queue.Queue()
+        self.queue = Queue()
         self.set_timeout(timeout)
 
     def set_timeout(self, timeout):
@@ -67,7 +70,7 @@ class BLEQueue(object):
             return
         try:
             task = self.queue.get_nowait()
-        except Queue.Empty:
+        except Empty:
             return
         self.ready = False
         if task is not None:
