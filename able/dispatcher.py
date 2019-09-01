@@ -37,6 +37,12 @@ class BluetoothDispatcherBase(EventDispatcher):
     def _set_queue(self):
         self.queue = self.queue_class(timeout=self.queue_timeout)
 
+    def _check_runtime_permissions(self):
+        return True
+
+    def _request_runtime_permissions(self):
+        pass
+
     @property
     def gatt(self):
         """GATT profile of the connected device
@@ -53,12 +59,16 @@ class BluetoothDispatcherBase(EventDispatcher):
 
     def start_scan(self):
         """Start a scan for devices.
+        Ask for runtime permission to access location.
         Start a system activity that allows the user to turn on Bluetooth,
         if Bluetooth is not enabled.
         The status of the scan start are reported with
         :func:`scan_started <on_scan_started>` event.
         """
-        self._ble.startScan(self.enable_ble_code)
+        if self._check_runtime_permissions():
+            self._ble.startScan(self.enable_ble_code)
+        else:
+            self._request_runtime_permissions()
 
     def stop_scan(self):
         """Stop the ongoing scan for devices.
