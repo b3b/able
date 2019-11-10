@@ -72,12 +72,10 @@ class BLETestApp(App):
     def on_device(self, ble, device, rssi, advertisement):
         if self.state != 'scan':
             return
-        for ad in advertisement:
-            if ad.ad_type == Advertisement.ad_types.complete_local_name:
-                if str(ad.data) == 'KivyBLETest':
-                    self.device = device
-                    self.state = 'found'
-                    self.ble.stop_scan()
+        if device.getName() == 'KivyBLETest':
+            self.device = device
+            self.state = 'found'
+            self.ble.stop_scan()
 
     def on_scan_completed(self, ble):
         if self.device:
@@ -155,8 +153,7 @@ class BLETestApp(App):
     def reset_remote_counter(self):
         self.increment_count_value = '0'
         self.counter_value = ''
-        self.ble.write_characteristic(self.characteristics['counter_reset'],
-                                      '1')
+        self.ble.write_characteristic(self.characteristics['counter_reset'], [])
         self.counter_state = 'enabled'
 
     def on_characteristic_read(self, ble, characteristic, status):
@@ -178,7 +175,7 @@ class BLETestApp(App):
 
     def increment_remote_counter(self):
         characteristic = self.characteristics['counter_increment']
-        self.ble.write_characteristic(characteristic, '1')
+        self.ble.write_characteristic(characteristic, [])
         prev_value = int(self.increment_count_value)
         self.increment_count_value = str(prev_value + 1)
 
