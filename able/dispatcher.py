@@ -1,6 +1,8 @@
-from able.queue import BLEQueue, ble_task, ble_task_done
 from kivy.event import EventDispatcher
 from kivy.logger import Logger
+
+from able.queue import BLEQueue, ble_task, ble_task_done
+from able.utils import force_convertible_to_java_array
 
 
 class BLEError(object):
@@ -111,7 +113,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         :param descriptor: BluetoothGattDescriptor Java object
         :param value: value to write
         """
-        if not descriptor.setValue(value):
+        if not descriptor.setValue(force_convertible_to_java_array(value)):
             Logger.error("Error on set descriptor value")
             return
         if not self.gatt.writeDescriptor(descriptor):
@@ -124,7 +126,8 @@ class BluetoothDispatcherBase(EventDispatcher):
         :param characteristic: BluetoothGattCharacteristic Java object
         :param value: value to write
         """
-        self._ble.writeCharacteristic(characteristic, value or [])
+        self._ble.writeCharacteristic(characteristic,
+                                      force_convertible_to_java_array(value))
 
     @ble_task
     def read_characteristic(self, characteristic):
