@@ -17,6 +17,7 @@ BLE = autoclass('org.able.BLE')
 BluetoothGattDescriptor = autoclass(
     'android.bluetooth.BluetoothGattDescriptor')
 ENABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+ENABLE_INDICATION_VALUE = BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
 DISABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
 
 
@@ -37,11 +38,19 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
         request_permission(Permission.ACCESS_COARSE_LOCATION,
                            self.on_runtime_permissions)
 
-    def enable_notifications(self, characteristic, enable=True):
+    def enable_notifications(self, characteristic, enable=True, indication=False):
         if not self.gatt.setCharacteristicNotification(characteristic, enable):
             return False
-        descriptor_value = (ENABLE_NOTIFICATION_VALUE if enable
-                            else DISABLE_NOTIFICATION_VALUE)
+
+        if not enable:
+            # DISABLE_NOTIFICAITON_VALUE is for disabling
+            # both notifications and indications
+            descriptor_value = DISABLE_NOTIFICATION_VALUE
+        elif indication:
+            descriptor_value = ENABLE_INDICATION_VALUE
+        else:
+            descriptor_value = ENABLE_NOTIFICATION_VALUE
+
         for descriptor in characteristic.getDescriptors().toArray():
             self.write_descriptor(descriptor, descriptor_value)
         return True
