@@ -96,11 +96,12 @@ class BluetoothDispatcherBase(EventDispatcher):
         """
         return self.gatt.discoverServices()
 
-    def enable_notifications(self, characteristic, enable=True):
-        """Enable or disable notifications for a given characteristic
+    def enable_notifications(self, characteristic, enable=True, indication=False):
+        """Enable/disable notifications or indications for a given characteristic
 
         :param characteristic: BluetoothGattCharacteristic Java object
         :param enable: enable notifications if True, else disable notifications
+        :param indication: handle indications instead of notifications
         :return: True, if the operation was initiated successfully
         """
         return True
