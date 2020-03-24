@@ -87,3 +87,8 @@ class PythonBluetooth(PythonJavaClass):
         # characteristic = descriptor.getCharacteristic()
         # uuid = characteristic.getUuid().toString()
         self.dispatcher.dispatch('on_descriptor_write', descriptor, status)
+
+    @java_method('(II)V')
+    def on_rssi_updated(self, rssi, status):
+        self.dispatcher.dispatch('on_gatt_release')
+        self.dispatcher.dispatch('on_rssi_updated', rssi, status)

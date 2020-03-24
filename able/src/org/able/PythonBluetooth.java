@@ -19,4 +19,5 @@ interface PythonBluetooth
         public void on_descriptor_read(BluetoothGattDescriptor descriptor, int status);
         public void on_descriptor_write(BluetoothGattDescriptor descriptor, int status);
         public void on_connection_state_change(int status, int state);
+	public void on_rssi_updated(int rssi, int status);
 }
