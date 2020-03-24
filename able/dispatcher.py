@@ -22,7 +22,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         'on_connection_state_change', 'on_characteristic_changed',
         'on_characteristic_read', 'on_characteristic_write',
         'on_descriptor_read', 'on_descriptor_write',
-        'on_gatt_release', 'on_error',
+        'on_gatt_release', 'on_error', 'on_rssi_updated'
     )
     queue_class = BLEQueue
 
@@ -138,6 +138,13 @@ class BluetoothDispatcherBase(EventDispatcher):
         """
         self._ble.readCharacteristic(characteristic)
 
+    @ble_task
+    def update_rssi(self):
+        """Triggers an update for the RSSI from the associated remote device
+        Event is dispatched at every RSSI update completed operation
+        """
+        self._ble.readRemoteRssi()
+
     def on_error(self, msg):
         """Error handler
 
@@ -233,6 +240,15 @@ class BluetoothDispatcherBase(EventDispatcher):
         """`descriptor_write` event handler
 
         :param descriptor: BluetoothGattDescriptor Java object
+        :param status: status of the operation,
+                       `GATT_SUCCESS` if the operation succeeds
+        """
+        pass
+
+    def on_rssi_updated(self, rssi, status):
+        """`on_rssi_updated` event handler
+
+        :param rssi: integer containing RSSI value in dBm
         :param status: status of the operation,
                        `GATT_SUCCESS` if the operation succeeds
         """
