@@ -63,6 +63,19 @@
                 on_press: app.start_scan()
                 size_hint_y: .2
 
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: .2
+                spacing: 10
+                Button:
+                    disabled: app.state != 'connected'
+                    text: 'Read RSSI'
+                    on_press: app.read_rssi()
+                Caption:
+                    text: 'RSSI Value:'
+                Value:
+                    text: app.rssi
+
             ToggleButton:
                 disabled: app.state != 'connected'
                 text: "Enable notifications"

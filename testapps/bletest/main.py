@@ -21,6 +21,7 @@ class BLETestApp(App):
     ble = BluetoothDispatcher()
     state = StringProperty('')
     test_string = StringProperty('')
+    rssi = StringProperty('')
     notification_value = StringProperty('')
     counter_value = StringProperty('')
     increment_count_value = StringProperty('')
@@ -59,6 +60,7 @@ class BLETestApp(App):
         self.ble.bind(on_services=self.on_services)
         self.ble.bind(on_characteristic_read=self.on_characteristic_read)
         self.ble.bind(on_characteristic_changed=self.on_characteristic_changed)
+        self.ble.bind(on_rssi_updated=self.on_rssi_updated)
 
     def start_scan(self, *args, **kwargs):
         if not self.state:
@@ -103,6 +105,13 @@ class BLETestApp(App):
             'counter_reset': self.services.search(
                 self.uids['counter_reset']),
         }
+
+    def read_rssi(self):
+        self.rssi = '...'
+        result = self.ble.update_rssi()
+
+    def on_rssi_updated(self, ble, rssi, status):
+        self.rssi = str(rssi) if status == GATT_SUCCESS else f"Bad status: {status}"
 
     def read_test_string(self, ble):
         characteristic = self.services.search(self.uids['string'])
