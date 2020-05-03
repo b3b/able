@@ -98,7 +98,7 @@ public class BLE {
         public void connectGatt(BluetoothDevice device) {
                 Log.d(TAG, "connectGatt");
                 if (mBluetoothGatt == null) {
-                        mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
+                        mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback, BluetoothDevice.TRANSPORT_LE);
                 }
         }
 
