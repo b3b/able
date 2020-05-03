@@ -14,8 +14,8 @@ from able.dispatcher import BluetoothDispatcherBase
 Activity = autoclass('android.app.Activity')
 BLE = autoclass('org.able.BLE')
 
-BluetoothGattDescriptor = autoclass(
-    'android.bluetooth.BluetoothGattDescriptor')
+BluetoothGattDescriptor = autoclass('android.bluetooth.BluetoothGattDescriptor')
+BluetoothAdapter = autoclass('android.bluetooth.BluetoothAdapter')
 ENABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 ENABLE_INDICATION_VALUE = BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
 DISABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
@@ -37,6 +37,16 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
     def _request_runtime_permissions(self):
         request_permission(Permission.ACCESS_COARSE_LOCATION,
                            self.on_runtime_permissions)
+
+    def connect_by_device_address(self, address: str):
+        address = address.upper()
+        if not BluetoothAdapter.checkBluetoothAddress(address):
+            raise ValueError(f"{address} is not a valid Bluetooth address")
+        # remember address to retry connection request when adapter becomes ready
+        self._remote_device_address = address
+        adapter = self._ble.getAdapter(self.enable_ble_code)
+        if adapter:
+            self.connect_gatt(adapter.getRemoteDevice(address))
 
     def enable_notifications(self, characteristic, enable=True, indication=False):
         if not self.gatt.setCharacteristicNotification(characteristic, enable):
@@ -70,6 +80,9 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
 
     def on_bluetooth_enabled(self, enabled):
         if enabled:
-            self.start_scan()
-        else:
+            if self._remote_device_address:  # connection by MAC address was requested, without scanning
+                self.connect_by_device_address(self._remote_device_address)
+            else:
+                self.start_scan()
+        elif not self._remote_device_address:
             self.dispatch('on_scan_started', False)

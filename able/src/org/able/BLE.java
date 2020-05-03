@@ -50,26 +50,37 @@ public class BLE {
                 mBluetoothAdapter = bluetoothManager.getAdapter();
         }
 
+        public BluetoothAdapter getAdapter(int EnableBtCode) {
+                if (mBluetoothAdapter == null) {
+                        showError("Device do not support Bluetooth Low Energy.");
+                        return null;
+                }
+                if (!mBluetoothAdapter.isEnabled()) {
+                        Log.d(TAG, "BLE adapter is not enabled");
+                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        PythonActivity.mActivity.startActivityForResult(enableBtIntent, EnableBtCode);
+                        return null;
+                }
+                return mBluetoothAdapter;
+        }
+
         public BluetoothGatt getGatt() {
                 return mBluetoothGatt;
         }
 
         public void startScan(int EnableBtCode) {
                 Log.d(TAG, "startScan");
-                if (mBluetoothAdapter == null) {
-                        showError("Device do not support Bluetooth Low Energy.");
-                        return;
-                }
-                if (!mBluetoothAdapter.isEnabled()) {
-                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                        PythonActivity.mActivity.startActivityForResult(enableBtIntent, EnableBtCode);
-                        return;
-                }
-                if (mBluetoothAdapter.startLeScan(mLeScanCallback)) {
-                        mScanning = true;
-                        mPython.on_scan_started(true);
-                } else {
-                        mPython.on_scan_started(false);
+                BluetoothAdapter adapter = getAdapter(EnableBtCode);
+                if (adapter != null) {
+                    Log.d(TAG, "BLE adapter is ready for scan");
+                    if (adapter.startLeScan(mLeScanCallback)) {
+                            Log.d(TAG, "BLE scan started successfully");
+                            mScanning = true;
+                            mPython.on_scan_started(true);
+                    } else {
+                            Log.d(TAG, "BLE scan not started");
+                            mPython.on_scan_started(false);
+                    }
                 }
         }
 

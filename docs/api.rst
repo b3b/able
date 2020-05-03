@@ -11,6 +11,7 @@ Classes
              set_queue_timeout,
              start_scan,
              stop_scan,
+             connect_by_device_address,
              connect_gatt,
              close_gatt,
              discover_services,

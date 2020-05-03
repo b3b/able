@@ -29,9 +29,10 @@ class BluetoothDispatcherBase(EventDispatcher):
     def __init__(self, queue_timeout=0.5, enable_ble_code=0xab1e):
         super(BluetoothDispatcherBase, self).__init__()
         self.queue_timeout = queue_timeout
+        self.enable_ble_code = enable_ble_code
+        self._remote_device_address = None
         self._set_ble_interface()
         self._set_queue()
-        self.enable_ble_code = enable_ble_code
 
     def _set_ble_interface(self):
         self._ble = BLEError('BLE is not implemented for platform')
@@ -67,6 +68,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         The status of the scan start are reported with
         :func:`scan_started <on_scan_started>` event.
         """
+        self._remote_device_address = None
         if self._check_runtime_permissions():
             self._ble.startScan(self.enable_ble_code)
         else:
@@ -76,6 +78,16 @@ class BluetoothDispatcherBase(EventDispatcher):
         """Stop the ongoing scan for devices.
         """
         self._ble.stopScan()
+
+    def connect_by_device_address(self, address: str):
+        """Connect to GATT Server of the device with a given Bluetooth hardware address, without scanning.
+        Start a system activity that allows the user to turn on Bluetooth if Bluetooth is not enabled.
+
+        :param address: Bluetooth hardware address string in "XX:XX:XX:XX:XX:XX" format
+        :raises:
+            ValueError: if `address` is not a valid Bluetooth address
+        """
+        pass
 
     def connect_gatt(self, device):
         """Connect to GATT Server hosted by device
