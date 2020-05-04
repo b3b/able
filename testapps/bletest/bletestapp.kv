@@ -1,4 +1,6 @@
 #:kivy 1.1.0
+#: import Factory kivy.factory.Factory
+#: import findall re.findall
 
 <Caption@Label>:
     padding_left: '4sp'
@@ -11,6 +13,33 @@
     halign: 'left'
     text_size: self.size
     valign: 'middle'
+
+<ConnectByMACDialog@Popup>:
+    title: 'Connect by MAC address'
+    size_hint: None, None
+    size: '400sp', '120sp'
+    BoxLayout:
+        orientation: 'vertical'
+        pos: self.pos
+        size: root.size
+
+        TextInput:
+            size_hint_y: .5
+            hint_text: 'Device address'
+            input_filter: lambda value, _ : ''.join(findall('[0-9a-fA-F:]+', value)).upper()
+            multiline: False
+            text: app.device_address
+            on_text: app.device_address = self.text
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint_y: .5
+            Button:
+                text: 'Connect'
+                on_press: root.dismiss(), app.connect_by_mac_address()
+            Button:
+                text: 'Cancel'
+                on_press: root.dismiss()
 
 <MainLayout>:
     padding: '10sp'
@@ -58,10 +87,18 @@
         BoxLayout:
             spacing: '20sp'
             orientation: 'vertical'
-            Button:
-                text: 'Connect'
-                on_press: app.start_scan()
-                size_hint_y: .2
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: .3
+
+                Button:
+                    text: 'Scan and connect'
+                    on_press: app.start_scan()
+
+                Button:
+                    text: 'Connect by MAC address'
+                    on_press: Factory.ConnectByMACDialog().open()
 
             BoxLayout:
                 orientation: 'horizontal'

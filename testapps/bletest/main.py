@@ -2,12 +2,13 @@
 """
 import time
 
-from able import GATT_SUCCESS, Advertisement, BluetoothDispatcher
+from able import GATT_SUCCESS, BluetoothDispatcher
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.config import Config
 from kivy.properties import BooleanProperty, StringProperty
 from kivy.uix.boxlayout import BoxLayout
+from kivy.storage.jsonstore import JsonStore
 
 Config.set('kivy', 'log_level', 'debug')
 Config.set('kivy', 'log_enable', '1')
@@ -32,6 +33,10 @@ class BLETestApp(App):
     counter_total_time = StringProperty('')
     queue_timeout_enabled = BooleanProperty(True)
     queue_timeout = StringProperty('1000')
+    device_name = StringProperty('KivyBLETest')
+    device_address = StringProperty('')
+
+    store = JsonStore('bletestapp.json')
 
     uids = {
         'string': '0d01',
@@ -42,6 +47,10 @@ class BLETestApp(App):
     }
 
     def build(self):
+        if self.store.exists('device'):
+            self.device_address = self.store.get('device')['address']
+        else:
+            self.device_address = ''
         return MainLayout()
 
     def on_pause(self):
@@ -50,7 +59,7 @@ class BLETestApp(App):
     def on_resume(self):
         pass
 
-    def init(self, *args, **kwargs):
+    def init(self):
         self.set_queue_settings()
         self.ble.bind(on_device=self.on_device)
         self.ble.bind(on_scan_started=self.on_scan_started)
@@ -62,11 +71,23 @@ class BLETestApp(App):
         self.ble.bind(on_characteristic_changed=self.on_characteristic_changed)
         self.ble.bind(on_rssi_updated=self.on_rssi_updated)
 
-    def start_scan(self, *args, **kwargs):
+    def start_scan(self):
         if not self.state:
             self.init()
         self.state = 'scan_start'
+        self.ble.close_gatt()
         self.ble.start_scan()
+
+    def connect_by_mac_address(self):
+        self.store.put('device', address=self.device_address)
+        if not self.state:
+            self.init()
+        self.state = 'try_connect'
+        self.ble.close_gatt()
+        try:
+            self.ble.connect_by_device_address(self.device_address)
+        except ValueError as exc:
+            self.state = str(exc)
 
     def on_scan_started(self, ble, success):
         self.state = 'scan' if success else 'scan_error'
@@ -74,7 +95,7 @@ class BLETestApp(App):
     def on_device(self, ble, device, rssi, advertisement):
         if self.state != 'scan':
             return
-        if device.getName() == 'KivyBLETest':
+        if device.getName() == self.device_name:
             self.device = device
             self.state = 'found'
             self.ble.stop_scan()
@@ -120,7 +141,7 @@ class BLETestApp(App):
         else:
             self.test_string = 'not found'
 
-    def read_remote_counter(self, *args, **kwargs):
+    def read_remote_counter(self):
         characteristic = self.services.search(self.uids['counter_read'])
         if characteristic:
             self.ble.read_characteristic(characteristic)
@@ -147,7 +168,7 @@ class BLETestApp(App):
                 self.counter_state = 'stop'
                 self.read_remote_counter()
 
-    def counter_next(self, *args, **kwargs):
+    def counter_next(self, dt):
         if self.counter_state == 'init':
             self.counter_started_time = time.time()
             self.counter_total_time = ''
