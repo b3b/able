@@ -26,10 +26,13 @@ class Advertisement(object):
 
         complete_local_name : "Complete Local Name" (0x09)
 
+        service_data : "Service Data" (0x16)
+
         manufacturer_specific_data : "Manufacturer Specific Data" (0xff)
         """
         flags = 0x01
         complete_local_name = 0x09
+        service_data = 0x16
         manufacturer_specific_data = 0xff
 
     def __init__(self, data):
