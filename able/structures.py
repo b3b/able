@@ -20,7 +20,7 @@ class Advertisement(object):
     class ad_types:
         """
         Assigned numbers for some of `advertisement data types
-        <https://www.bluetooth.org/en-us/specification/assigned-numbers/generic-access-profile>`_.
+        <https://www.bluetooth.com/specifications/assigned-numbers/generic-access-profile/>`_.
 
         flags : "Flags" (0x01)
 
