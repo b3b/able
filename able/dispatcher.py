@@ -1,6 +1,9 @@
+from typing import Optional
+
 from kivy.event import EventDispatcher
 from kivy.logger import Logger
 
+from able import WriteType
 from able.queue import BLEQueue, ble_task, ble_task_done
 from able.utils import force_convertible_to_java_array
 
@@ -133,14 +136,19 @@ class BluetoothDispatcherBase(EventDispatcher):
             Logger.error("Error on descriptor write")
 
     @ble_task
-    def write_characteristic(self, characteristic, value):
+    def write_characteristic(self, characteristic, value, write_type: Optional[WriteType] = None):
         """Write a given characteristic value to the associated remote device
 
         :param characteristic: BluetoothGattCharacteristic Java object
         :param value: value to write
+        :param write_type: specific write type to set for the characteristic
         """
-        self._ble.writeCharacteristic(characteristic,
-                                      force_convertible_to_java_array(value))
+        self._ble.writeCharacteristic(
+            characteristic,
+            force_convertible_to_java_array(value),
+            int(write_type or 0)
+        )
+
 
     @ble_task
     def read_characteristic(self, characteristic):

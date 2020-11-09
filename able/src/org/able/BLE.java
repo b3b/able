@@ -181,16 +181,11 @@ public class BLE {
 			}
                 };
 
-        public boolean writeCharacteristic(BluetoothGattCharacteristic characteristic, byte[] data) {
+        public boolean writeCharacteristic(BluetoothGattCharacteristic characteristic, byte[] data, int writeType) {
                 if (characteristic.setValue(data)) {
-                        return mBluetoothGatt.writeCharacteristic(characteristic);
-                }
-                return false;
-        }
-
-        public boolean writeCharacteristicNoResponse(BluetoothGattCharacteristic characteristic, byte[] data) {
-                if (characteristic.setValue(data)) {
-                        characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+                        if (writeType != 0) {
+                                characteristic.setWriteType(writeType);
+                        }
                         return mBluetoothGatt.writeCharacteristic(characteristic);
                 }
                 return false;

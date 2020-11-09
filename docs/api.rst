@@ -45,4 +45,5 @@ Constants
 .. autodata:: GATT_SUCCESS
 .. autodata:: STATE_CONNECTED
 .. autodata:: STATE_DISCONNECTED
-
+.. autoclass:: WriteType
+   :members:
