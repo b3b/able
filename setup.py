@@ -1,6 +1,7 @@
 import os
 from os.path import dirname
 from setuptools import setup, convert_path
+from setuptools.command.install import install
 
 
 main_ns = {}
@@ -11,26 +12,44 @@ with open(convert_path('README.rst')) as readme_file:
     long_description = readme_file.read()
 
 
-if 'ANDROIDAPI' not in os.environ:
-    raise Exception(
-        'This recipe should not be installed directly, '
-        'only with the buildozer tool.'
-    )
+class InstallRecipe(install):
+    """Command to install `able` recipe,
+    copies Java files to distribution `javaclass` directory."""
 
-# Find Java classes target directory from the environment
-distribution_dir = os.environ['PYTHONPATH'].split(':')[-1]
-distribution_name = distribution_dir.split('/')[-1]
-javaclass_dir = os.path.join(dirname(dirname(distribution_dir)), 'javaclasses')
+    def run(self):
+        if 'ANDROIDAPI' not in os.environ:
+            raise Exception(
+                'This recipe should not be installed directly, '
+                'only with the buildozer tool.'
+            )
 
-if not os.path.exists(javaclass_dir):
-    raise Exception(
-        'javaclasses directory is not found. '
-        'Please report issue  to: https://github.com/b3b/able/issues'
-    )
+        # Find Java classes target directory from the environment
+        distribution_dir = os.environ['PYTHONPATH'].split(':')[-1]
+        distribution_name = distribution_dir.split('/')[-1]
+        javaclass_dir = os.path.join(
+            dirname(dirname(distribution_dir)),
+            'javaclasses'
+        )
 
-javaclass_dir = os.path.join(javaclass_dir, distribution_name, 'org', 'able')
-if not os.path.exists(javaclass_dir):
-    os.makedirs(javaclass_dir)
+        if not os.path.exists(javaclass_dir):
+            raise Exception(
+                'javaclasses directory is not found. '
+                'Please report issue to: https://github.com/b3b/able/issues'
+            )
+
+        javaclass_dir = os.path.join(javaclass_dir,
+                                     distribution_name, 'org', 'able')
+        if not os.path.exists(javaclass_dir):
+            os.makedirs(javaclass_dir)
+
+        self.distribution.data_files = [
+            (javaclass_dir, [
+                'able/src/org/able/BLE.java',
+                'able/src/org/able/PythonBluetooth.java',
+            ]),
+        ]
+
+        install.run(self)
 
 
 setup(
@@ -49,7 +68,6 @@ setup(
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: MIT License',
         'Operating System :: Android',
-        'Framework :: Kivy',
         'Topic :: System :: Networking',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -59,10 +77,7 @@ setup(
     keywords='android ble bluetooth kivy',
     license='MIT',
     zip_safe=False,
-    data_files=[
-         (javaclass_dir, [
-             'able/src/org/able/BLE.java',
-             'able/src/org/able/PythonBluetooth.java',
-         ]),
-    ],
+    cmdclass={
+        'install': InstallRecipe,
+    },
 )

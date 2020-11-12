@@ -1,6 +1,12 @@
 Android Bluetooth Low Energy
 ============================
 
+.. start-badges
+.. image:: https://img.shields.io/pypi/v/able_recipe.svg
+    :target: https://pypi.python.org/pypi/able_recipe
+    :alt: Latest version on PyPi
+.. end-badges
+
 `Python <https://github.com/kivy/python-for-android>`_ interface to Android Bluetooth Low Energy API.
 
 Generated documentation: http://able.readthedocs.org

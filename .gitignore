@@ -7,3 +7,10 @@ docs/_build/
 *.pyo
 *.pyc
 *.so
+
+build/
+dist/
+sdist/
+wheels/
+*.egg-info
+
