@@ -17,16 +17,9 @@ Build
 
 The following instructions are for building app with `buildozer <https://github.com/kivy/buildozer/>`_ tool.
 
-Download the `able` recipes directory: https://github.com/b3b/able/tree/master/recipes .
+`able_recipe` recipe should be added to buildozer.spec requirements::
 
-Path to recipes directory should be set in buildozer.spec::
-
-   p4a.local_recipes = /path/to/downloaded/recipes
-
-
-`able` recipe should be added to buildozer.spec requirements::
-
-   requirements = python3,kivy,android,able
+   requirements = python3,kivy,android,able_recipe>=1.0
 
 
 Bluetooth permissions should be requested in buildozer.spec::

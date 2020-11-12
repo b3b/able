@@ -4,10 +4,9 @@ version = 1.0
 package.name = alert_mi
 package.domain = org.kivy
 source.dir = .
-p4a.local_recipes = ../../recipes
 source.include_exts = py,png,jpg,kv,atlas
 android.permissions = BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_COARSE_LOCATION
-requirements = python3,kivy,android,able
+requirements = python3,kivy,android,able_recipe>=1.0
 
 [buildozer]
 warn_on_root = 1
