@@ -19,7 +19,7 @@ The following instructions are for building app with `buildozer <https://github.
 
 `able_recipe` recipe should be added to buildozer.spec requirements::
 
-   requirements = python3,kivy,android,able_recipe>=1.0
+   requirements = python3,kivy,android,able_recipe
 
 
 Bluetooth permissions should be requested in buildozer.spec::

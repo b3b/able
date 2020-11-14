@@ -6,7 +6,7 @@ package.domain = org.kivy
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 android.permissions = BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_COARSE_LOCATION
-requirements = python3,kivy,android,able_recipe>=1.0
+requirements = python3,kivy,android,able_recipe
 
 # (str) Android's logcat filters to use
 android.logcat_filters = *:S python:D
