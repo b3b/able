@@ -5,7 +5,7 @@ package.name = alert_mi
 package.domain = org.kivy
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
-android.permissions = BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_COARSE_LOCATION
+android.permissions = BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_FINE_LOCATION
 requirements = python3,kivy,android,able_recipe
 
 [buildozer]

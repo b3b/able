@@ -24,7 +24,7 @@ The following instructions are for building app with `buildozer <https://github.
 
 Bluetooth permissions should be requested in buildozer.spec::
 
-    android.permissions = BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_COARSE_LOCATION
+    android.permissions = BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_FINE_LOCATION
 
 
 App configuration example: `buildozer.spec <https://github.com/b3b/able/tree/master/examples/alert/buildozer.spec>`_

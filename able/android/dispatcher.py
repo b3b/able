@@ -29,13 +29,11 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
         activity.bind(on_activity_result=self.on_activity_result)
 
     def _check_runtime_permissions(self):
-        # Either ACCESS_COARSE_LOCATION or ACCESS_FINE_LOCATION permission
-        # is needed to obtain BLE scan results
-        return check_permission(Permission.ACCESS_COARSE_LOCATION) or \
-            check_permission(Permission.ACCESS_FINE_LOCATION)
+        # ACCESS_FINE_LOCATION permission is needed to obtain BLE scan results
+        return check_permission(Permission.ACCESS_FINE_LOCATION)
 
     def _request_runtime_permissions(self):
-        request_permission(Permission.ACCESS_COARSE_LOCATION,
+        request_permission(Permission.ACCESS_FINE_LOCATION,
                            self.on_runtime_permissions)
 
     def connect_by_device_address(self, address: str):
