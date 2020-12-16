@@ -130,6 +130,9 @@ public class BLE {
                                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                                         Log.d(TAG, "Disconnected from GATT server, status:" + status);
                                 }
+                                if (mBluetoothGatt == null) {
+                                        mBluetoothGatt = gatt;
+                                }
                                 mPython.on_connection_state_change(status, newState);
                         }
 
