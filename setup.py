@@ -63,6 +63,9 @@ setup(
     author_email='ash.b3b@gmail.com',
     install_requires=[],
     url='https://github.com/b3b/able',
+    project_urls={
+        'Changelog': 'https://github.com/b3b/able/blob/master/CHANGELOG.rst',
+    },
     # https://pypi.org/classifiers/
     classifiers=[
         'Development Status :: 3 - Alpha',

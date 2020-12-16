@@ -17,9 +17,9 @@ STATE_DISCONNECTED = 0  #: The profile is in disconnected state
 class WriteType(IntEnum):
     """GATT characteristic write types constants.
     """
-    DEFAULT = 2 #:  Write characteristic, requesting acknoledgement by the remote device
+    DEFAULT = 2  #: Write characteristic, requesting acknoledgement by the remote device
     NO_RESPONSE = 1  #: Write characteristic without requiring a response by the remote device
-    SIGNED = 4  #:  Write characteristic including authentication signature
+    SIGNED = 4  #: Write characteristic including authentication signature
 
 
 if platform == 'android':
