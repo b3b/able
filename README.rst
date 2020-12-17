@@ -28,3 +28,22 @@ Bluetooth permissions should be requested in buildozer.spec::
 
 
 App configuration example: `buildozer.spec <https://github.com/b3b/able/tree/master/examples/alert/buildozer.spec>`_
+
+
+Contributors
+------------
+
+Thanks,
+
+.. csv-table::
+
+    `andfmart <https://github.com/andfmart>`_
+    `andreamerello <https://github.com/andreamerello>`_
+    `dgatf <https://github.com/dgatf>`_
+    `dwmoffatt <https://github.com/dwmoffatt>`_
+    `Enkumicahel <https://github.com/Enkumicahel>`_
+    `FalkorDev <https://github.com/FalkorDev>`_
+    `jacklinquan <https://github.com/jacklinquan>`_
+    `juasiepo <https://github.com/juasiepo>`_
+    `PapoKarlo <https://github.com/PapoKarlo>`_
+    `RoberWare <https://github.com/RoberWare>`_
