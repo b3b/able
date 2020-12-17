@@ -154,33 +154,45 @@ public class BLE {
                                 mPython.on_characteristic_changed(characteristic);
                         }
 
+                        @Override
                         public void onCharacteristicRead(BluetoothGatt gatt,
                                                          BluetoothGattCharacteristic characteristic,
                                                          int status) {
                                 mPython.on_characteristic_read(characteristic, status);
                         }
 
+                        @Override
                         public void onCharacteristicWrite(BluetoothGatt gatt,
                                                           BluetoothGattCharacteristic characteristic,
                                                           int status) {
                                 mPython.on_characteristic_write(characteristic, status);
                         }
 
+                        @Override
                         public void onDescriptorRead(BluetoothGatt gatt, 
                                                      BluetoothGattDescriptor descriptor, 
                                                      int status) {
                                 mPython.on_descriptor_read(descriptor, status);
                         }
 
+                        @Override
                         public void onDescriptorWrite(BluetoothGatt gatt, 
                                                       BluetoothGattDescriptor descriptor, 
                                                       int status) {
                                 mPython.on_descriptor_write(descriptor, status);
                         }
 
+                        @Override
 			public void onReadRemoteRssi(BluetoothGatt gatt,
 						     int rssi, int status) {
 				mPython.on_rssi_updated(rssi, status);
+			}
+
+                        @Override
+                        public void onMtuChanged(BluetoothGatt gatt,
+                                                 int mtu, int status) {
+                                Log.d(TAG, String.format("onMtuChanged mtu=%d status=%d", mtu, status));
+				mPython.on_mtu_changed(mtu, status);
 			}
                 };
 

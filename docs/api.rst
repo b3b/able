@@ -19,6 +19,8 @@ Classes
              write_descriptor,
              write_characteristic,
              read_characteristic,
+             update_rssi,
+             request_mtu,
              on_error,
              on_gatt_release,
              on_scan_started,
@@ -31,6 +33,8 @@ Classes
              on_characteristic_write,
              on_descriptor_read,
              on_descriptor_write,
+             on_rssi_updated,
+             on_mtu_changed,
 
 .. autoclass:: Advertisement
 

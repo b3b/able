@@ -92,3 +92,8 @@ class PythonBluetooth(PythonJavaClass):
     def on_rssi_updated(self, rssi, status):
         self.dispatcher.dispatch('on_gatt_release')
         self.dispatcher.dispatch('on_rssi_updated', rssi, status)
+
+    @java_method('(II)V')
+    def on_mtu_changed(self, mtu, status):
+        self.dispatcher.dispatch('on_gatt_release')
+        self.dispatcher.dispatch('on_mtu_changed', mtu, status)

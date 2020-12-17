@@ -25,7 +25,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         'on_connection_state_change', 'on_characteristic_changed',
         'on_characteristic_read', 'on_characteristic_write',
         'on_descriptor_read', 'on_descriptor_write',
-        'on_gatt_release', 'on_error', 'on_rssi_updated'
+        'on_gatt_release', 'on_error', 'on_rssi_updated', 'on_mtu_changed',
     )
     queue_class = BLEQueue
 
@@ -149,7 +149,6 @@ class BluetoothDispatcherBase(EventDispatcher):
             int(write_type or 0)
         )
 
-
     @ble_task
     def read_characteristic(self, characteristic):
         """Read a given characteristic from the associated remote device
@@ -161,9 +160,16 @@ class BluetoothDispatcherBase(EventDispatcher):
     @ble_task
     def update_rssi(self):
         """Triggers an update for the RSSI from the associated remote device
-        Event is dispatched at every RSSI update completed operation
         """
         self._ble.readRemoteRssi()
+
+    @ble_task
+    def request_mtu(self, mtu: int):
+        """Request to change the ATT Maximum Transmission Unit value
+
+        :param value: new MTU size
+        """
+        self.gatt.requestMtu(mtu)
 
     def on_error(self, msg):
         """Error handler
@@ -266,10 +272,23 @@ class BluetoothDispatcherBase(EventDispatcher):
         pass
 
     def on_rssi_updated(self, rssi, status):
-        """`on_rssi_updated` event handler
+        """`onReadRemoteRssi` event handler.
+        Event is dispatched at every RSSI update completed operation,
+        reporting a RSSI value for a remote device connection.
 
         :param rssi: integer containing RSSI value in dBm
         :param status: status of the operation,
                        `GATT_SUCCESS` if the operation succeeds
+        """
+        pass
+
+    def on_mtu_changed(self, mtu, status):
+        """`onMtuChanged` event handler
+        Event is dispatched when MTU for a remote device has changed,
+        reporting a new MTU size.
+
+        :param mtu: integer containing the new MTU size
+        :param status: status of the operation,
+                       `GATT_SUCCESS` if the MTU has been changed successfully
         """
         pass
