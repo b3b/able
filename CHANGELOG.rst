@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.4
+-----
+
+* Fixed sending string data with `write_characteristic` function
+
 1.0.3
 -----
 

@@ -39,6 +39,7 @@ Thanks,
 
     `andfmart <https://github.com/andfmart>`_
     `andreamerello <https://github.com/andreamerello>`_
+    `datmaniac95  <https://github.com/datmaniac95 >`_
     `dgatf <https://github.com/dgatf>`_
     `dwmoffatt <https://github.com/dwmoffatt>`_
     `Enkumicahel <https://github.com/Enkumicahel>`_

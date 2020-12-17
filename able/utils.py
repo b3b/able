@@ -9,7 +9,7 @@ def force_convertible_to_java_array(
     >>> force_convertible_to_java_array(['314'])
     ['314']
     >>> force_convertible_to_java_array('314')
-    ['3', '1', '4']
+    b'314'
     >>> force_convertible_to_java_array(314)
     [314]
     >>> force_convertible_to_java_array(0)
@@ -22,8 +22,8 @@ def force_convertible_to_java_array(
     if isinstance(value, (list, tuple, bytes, bytearray)):
         return value
     try:
-        return list(value)
-    except TypeError:
+        return value.encode() or []
+    except AttributeError:
         if value is None:
             return []
     return [value]
