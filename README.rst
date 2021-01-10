@@ -12,6 +12,13 @@ Android Bluetooth Low Energy
 Generated documentation: http://able.readthedocs.org
 
 
+Quick start development environment
+-----------------------------------
+
+*able* is included in `PythonHere <https://herethere.me/`_ app, together with the `Jupyter Notebook <https://jupyter.org/>`_ it could be used as a development environment.
+Usage example: https://herethere.me/ble.html
+
+
 Build
 -----
 
