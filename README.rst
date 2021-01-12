@@ -25,7 +25,7 @@ Build
 
 The following instructions are for building app with `buildozer <https://github.com/kivy/buildozer/>`_ tool.
 
-`able_recipe` recipe should be added to buildozer.spec requirements::
+*able_recipe* recipe should be added to buildozer.spec requirements::
 
    requirements = python3,kivy,android,able_recipe
 
@@ -36,6 +36,16 @@ Bluetooth permissions should be requested in buildozer.spec::
 
 
 App configuration example: `buildozer.spec <https://github.com/b3b/able/tree/master/examples/alert/buildozer.spec>`_
+
+
+Build with a local version
+--------------------------
+
+To build app with a local (modified) version of *able*,
+
+path to *able* recipes directory should be set in buildozer.spec::
+
+    p4a.local_recipes = /path/to/cloned/repo/recipes
 
 
 Contributors
