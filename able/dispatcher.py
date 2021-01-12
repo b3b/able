@@ -57,6 +57,14 @@ class BluetoothDispatcherBase(EventDispatcher):
         """
         return self._ble.getGatt()
 
+    @property
+    def bonded_devices(self):
+        """List of Java `android.bluetooth.BluetoothDevice` objects of paired BLE devices.
+
+        :type: List[BluetoothDevice]
+        """
+        return []
+
     def set_queue_timeout(self, timeout):
         """Change the BLE operations queue timeout
         """

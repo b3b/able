@@ -14,14 +14,25 @@ from able.dispatcher import BluetoothDispatcherBase
 Activity = autoclass('android.app.Activity')
 BLE = autoclass('org.able.BLE')
 
-BluetoothGattDescriptor = autoclass('android.bluetooth.BluetoothGattDescriptor')
 BluetoothAdapter = autoclass('android.bluetooth.BluetoothAdapter')
+BluetoothDevice = autoclass('android.bluetooth.BluetoothDevice')
+BluetoothGattDescriptor = autoclass('android.bluetooth.BluetoothGattDescriptor')
+
 ENABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 ENABLE_INDICATION_VALUE = BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
 DISABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
 
 
 class BluetoothDispatcher(BluetoothDispatcherBase):
+
+    @property
+    def bonded_devices(self):
+        ble_types = (BluetoothDevice.DEVICE_TYPE_LE, BluetoothDevice.DEVICE_TYPE_DUAL)
+        return [
+            dev for dev in self._ble.mBluetoothAdapter.getBondedDevices().toArray()
+            if dev.getType() in ble_types
+        ]
+
 
     def _set_ble_interface(self):
         self._events_interface = PythonBluetooth(self)

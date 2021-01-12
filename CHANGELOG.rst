@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.5
+-----
+
+* Added `BluetoothDispatcher.bonded_devices` property: list of paired BLE devices
+
 1.0.4
 -----
 

@@ -8,6 +8,7 @@ Classes
 
 .. autoclass:: BluetoothDispatcher
    :members: gatt,
+             bonded_devices,
              set_queue_timeout,
              start_scan,
              stop_scan,
