@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.6
+-----
+
+* Fixed `TypeError` exception on `BluetoothDispatcher.enable_notifications`
+
+
 1.0.5
 -----
 
