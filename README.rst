@@ -9,15 +9,15 @@ Android Bluetooth Low Energy
 
 `Python <https://github.com/kivy/python-for-android>`_ interface to Android Bluetooth Low Energy API.
 
-Generated documentation: http://able.readthedocs.org
-
+:Code repository: https://github.com/b3b/herethere
+:Documentation: https://herethere.me/able
 
 Quick start development environment
 -----------------------------------
 
-*able* is included in `PythonHere <https://herethere.me/python>`_ app, together with the `Jupyter Notebook <https://jupyter.org/>`_ it could be used as a development environment.
+*able* is included in `PythonHere <https://herethere.me/pythonhere>`_ app, together with the `Jupyter Notebook <https://jupyter.org/>`_ it could be used as a development environment.
 
-Usage example: https://herethere.me/python/examples/ble.html
+Usage example: https://herethere.me/pythonhere/examples/ble.html
 
 
 Build

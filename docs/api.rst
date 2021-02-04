@@ -1,10 +1,13 @@
-.. automodule:: able
-
 API
 ---
 
+.. automodule:: able
+
 Classes
-~~~~~~~
+^^^^^^^
+
+BluetoothDispatcher
+"""""""""""""""""""
 
 .. autoclass:: BluetoothDispatcher
    :members: gatt,
@@ -37,15 +40,21 @@ Classes
              on_rssi_updated,
              on_mtu_changed,
 
+Advertisement
+"""""""""""""
+
 .. autoclass:: Advertisement
 
    .. autoclass:: able::Advertisement.ad_types
+
+Services
+""""""""
 
 .. autoclass:: Services
    :members:
 
 Constants
-~~~~~~~~~
+^^^^^^^^^
 
 .. autodata:: GATT_SUCCESS
 .. autodata:: STATE_CONNECTED
