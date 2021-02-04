@@ -9,7 +9,7 @@ Android Bluetooth Low Energy
 
 `Python <https://github.com/kivy/python-for-android>`_ interface to Android Bluetooth Low Energy API.
 
-:Code repository: https://github.com/b3b/herethere
+:Code repository: https://github.com/b3b/able
 :Documentation: https://herethere.me/able
 
 Quick start development environment
