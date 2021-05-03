@@ -66,6 +66,23 @@ class BluetoothDispatcherBase(EventDispatcher):
         """
         return []
 
+    @property
+    def name(self):
+        """Name of the Bluetooth adapter.
+
+        :setter: Set name of the Bluetooth adapter
+        :type: Optional[str]
+        """
+        adapter = self.adapter
+        return adapter and adapter.getName()
+
+    @name.setter
+    def name(self, value):
+        self._set_name(value)
+
+    def _set_name(self, value):
+        pass
+
     def set_queue_timeout(self, timeout):
         """Change the BLE operations queue timeout
         """

@@ -108,6 +108,10 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
     def _start_advertising(self, advertiser):
         advertiser._start()
 
+    @require_bluetooth_enabled
+    def _set_name(self, value):
+        self.adapter.setName(value)
+
     def on_runtime_permissions(self, permissions, grant_results):
         if permissions and all(grant_results):
             self.start_scan()

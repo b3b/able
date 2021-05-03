@@ -5,6 +5,7 @@ Changelog
 -----
 
 * Added `able.advertising`: module to perform BLE advertise operations
+* Added property to get and set Bluetoth adapter name
 
 
 1.0.6
