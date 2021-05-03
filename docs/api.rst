@@ -3,8 +3,8 @@ API
 
 .. automodule:: able
 
-Classes
-^^^^^^^
+Client
+^^^^^^
 
 BluetoothDispatcher
 """""""""""""""""""
@@ -12,6 +12,7 @@ BluetoothDispatcher
 .. autoclass:: BluetoothDispatcher
    :members: gatt,
              bonded_devices,
+             name,
              set_queue_timeout,
              start_scan,
              stop_scan,
@@ -54,10 +55,54 @@ Services
    :members:
 
 Constants
-^^^^^^^^^
+"""""""""
 
 .. autodata:: GATT_SUCCESS
 .. autodata:: STATE_CONNECTED
 .. autodata:: STATE_DISCONNECTED
 .. autoclass:: WriteType
    :members:
+
+
+Advertising
+^^^^^^^^^^^
+
+.. automodule:: able.advertising
+
+Advertiser
+""""""""""
+.. autoclass:: Advertiser
+   :members:
+   :member-order: bysource
+
+
+Payload
+"""""""
+.. autoclass:: AdvertiseData
+
+.. autoclass:: DeviceName
+   :show-inheritance:
+.. autoclass:: TXPowerLevel
+   :show-inheritance:
+.. autoclass:: ServiceUUID
+   :show-inheritance:
+.. autoclass:: ServiceData
+   :show-inheritance:
+.. autoclass:: ManufacturerData
+   :show-inheritance:
+
+Constants
+"""""""""
+
+.. autoclass:: Interval
+   :members:
+   :member-order: bysource
+
+.. autoclass:: TXPower
+   :members:
+   :member-order: bysource
+
+.. autoclass:: Status
+   :members:
+   :undoc-members:
+   :member-order: bysource

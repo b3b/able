@@ -11,6 +11,7 @@ Android Bluetooth Low Energy
 
 :Code repository: https://github.com/b3b/able
 :Documentation: https://herethere.me/able
+:Changelog: https://github.com/b3b/able/blob/master/CHANGELOG.rst
 
 Quick start development environment
 -----------------------------------

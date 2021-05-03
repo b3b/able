@@ -31,7 +31,17 @@ else:
     from unittest.mock import Mock
     sys.modules['android'] = Mock()
     sys.modules['android.permissions'] = Mock()
-    sys.modules['jnius'] = Mock()
+    jnius = Mock()
+
+    class mocked_autoclass(Mock):
+
+        def __call__(self, *args, **kwargs):
+            mock = Mock()
+            mock.__repr__ = lambda s: f"jnius.autoclass('{args[0]}')"
+            return mock
+
+    jnius.autoclass = mocked_autoclass()
+    sys.modules['jnius'] = jnius
 
     from able.dispatcher import BluetoothDispatcherBase
 
