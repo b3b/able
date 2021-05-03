@@ -25,6 +25,14 @@ class WriteType(IntEnum):
 if platform == 'android':
     from able.android.dispatcher import BluetoothDispatcher
 else:
+
+    # mock android and PyJNIus modules usage
+    import sys
+    from unittest.mock import Mock
+    sys.modules['android'] = Mock()
+    sys.modules['android.permissions'] = Mock()
+    sys.modules['jnius'] = Mock()
+
     from able.dispatcher import BluetoothDispatcherBase
 
     class BluetoothDispatcher(BluetoothDispatcherBase):

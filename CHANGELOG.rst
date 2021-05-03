@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.7
+-----
+
+* Added `able.advertising`: module to perform BLE advertise operations
+
+
 1.0.6
 -----
 

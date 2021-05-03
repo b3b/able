@@ -97,3 +97,38 @@ class PythonBluetooth(PythonJavaClass):
     def on_mtu_changed(self, mtu, status):
         self.dispatcher.dispatch('on_gatt_release')
         self.dispatcher.dispatch('on_mtu_changed', mtu, status)
+
+
+class PythonBluetoothAdvertiser(PythonJavaClass):
+    __javainterfaces__ = ['org.able.PythonBluetoothAdvertiser']
+    __javacontext__ = 'app'
+
+    def __init__(self, dispatcher):
+        super().__init__()
+        self.dispatcher = dispatcher
+
+    @java_method('(Landroid/bluetooth/le/AdvertisingSet;II)V')
+    def on_advertising_started(self, advertising_set, tx_power, status):
+        self.dispatcher.dispatch('on_advertising_set_changed', advertising_set)
+        self.dispatcher.dispatch('on_advertising_started', advertising_set, tx_power, status)
+
+    @java_method('(Landroid/bluetooth/le/AdvertisingSet;)V')
+    def on_advertising_stopped(self, advertising_set):
+        self.dispatcher.dispatch('on_advertising_set_changed', None)
+        self.dispatcher.dispatch('on_advertising_stopped', advertising_set)
+
+    @java_method('(Landroid/bluetooth/le/AdvertisingSet;BI)V')
+    def on_advertising_enabled(self, advertising_set, enable, status):
+        self.dispatcher.dispatch('on_advertising_enabled', advertising_set, enable, status)
+
+    @java_method('(Landroid/bluetooth/le/AdvertisingSet;I)V')
+    def on_advertising_data_set(self, advertising_set, status):
+        self.dispatcher.dispatch('on_advertising_data_set', advertising_set, status)
+
+    @java_method('(Landroid/bluetooth/le/AdvertisingSet;I)V')
+    def on_scan_response_data_set(self, advertising_set, status):
+        self.dispatcher.dispatch('on_scan_response_data_set', advertising_set, status)
+
+    @java_method('(Landroid/bluetooth/le/AdvertisingSet;II)V')
+    def on_advertising_parameters_updated(self, advertising_set, tx_power, status):
+        self.dispatcher.dispatch('on_advertising_parameters_updated', advertising_set, tx_power, status)

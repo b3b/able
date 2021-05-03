@@ -34,6 +34,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         self.queue_timeout = queue_timeout
         self.enable_ble_code = enable_ble_code
         self._remote_device_address = None
+        self._run_on_bluetooth_enabled = None
         self._set_ble_interface()
         self._set_queue()
 
@@ -79,16 +80,12 @@ class BluetoothDispatcherBase(EventDispatcher):
         The status of the scan start are reported with
         :func:`scan_started <on_scan_started>` event.
         """
-        self._remote_device_address = None
-        if self._check_runtime_permissions():
-            self._ble.startScan(self.enable_ble_code)
-        else:
-            self._request_runtime_permissions()
+        pass
 
     def stop_scan(self):
         """Stop the ongoing scan for devices.
         """
-        self._ble.stopScan()
+        pass
 
     def connect_by_device_address(self, address: str):
         """Connect to GATT Server of the device with a given Bluetooth hardware address, without scanning.

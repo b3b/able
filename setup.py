@@ -45,7 +45,9 @@ class InstallRecipe(install):
         self.distribution.data_files = [
             (javaclass_dir, [
                 'able/src/org/able/BLE.java',
+                'able/src/org/able/BLEAdvertiser.java',
                 'able/src/org/able/PythonBluetooth.java',
+                'able/src/org/able/PythonBluetoothAdvertiser.java',
             ]),
         ]
 
