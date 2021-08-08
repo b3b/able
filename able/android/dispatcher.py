@@ -55,10 +55,15 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
             if dev.getType() in ble_types
         ]
 
+    @property
+    def _is_service_context(self):
+        return not activity._activity
+
     def _set_ble_interface(self):
         self._events_interface = PythonBluetooth(self)
         self._ble = BLE(self._events_interface)
-        activity.bind(on_activity_result=self.on_activity_result)
+        if not self._is_service_context:
+            activity.bind(on_activity_result=self.on_activity_result)
 
     def _check_runtime_permissions(self):
         # ACCESS_FINE_LOCATION permission is needed to obtain BLE scan results
@@ -70,7 +75,7 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
 
     @require_bluetooth_enabled
     def start_scan(self):
-        if self._check_runtime_permissions():
+        if self._is_service_context or self._check_runtime_permissions():
             self._ble.startScan(self.enable_ble_code)
         else:
             self._request_runtime_permissions()

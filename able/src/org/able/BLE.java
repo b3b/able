@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.util.Log;
 import java.util.List;
 import org.kivy.android.PythonActivity;
+import org.kivy.android.PythonService;
 import org.able.PythonBluetooth;
 
 
@@ -28,10 +29,13 @@ public class BLE {
         private BluetoothGatt mBluetoothGatt;
         private List<BluetoothGattService> mBluetoothGattServices;
         private boolean mScanning;
+        private boolean mIsServiceContext = false;
 
         public void showError(final String msg) {
-                Log.d(TAG, msg);
-                PythonActivity.mActivity.toastError(TAG + " error. " + msg);
+                Log.e(TAG, msg);
+                if (!mIsServiceContext) {
+                        PythonActivity.mActivity.toastError(TAG + " error. " + msg);
+                }
                 mPython.on_error(msg);
         }
 
@@ -39,6 +43,12 @@ public class BLE {
                 mPython = python;
                 mContext = (Context) PythonActivity.mActivity;
                 mBluetoothGatt = null;
+
+                if (mContext == null) {
+                        Log.d(TAG, "Service context detected");
+                        mIsServiceContext = true;
+                        mContext = (Context) PythonService.mService;
+                }
 
                 if (!mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
                         showError("Device do not support Bluetooth Low Energy.");
@@ -56,9 +66,13 @@ public class BLE {
                         return null;
                 }
                 if (!mBluetoothAdapter.isEnabled()) {
-                        Log.d(TAG, "BLE adapter is not enabled");
-                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                        PythonActivity.mActivity.startActivityForResult(enableBtIntent, EnableBtCode);
+                        if (mIsServiceContext) {
+                                showError("BLE adapter is not enabled");
+                        } else {
+                                Log.d(TAG, "BLE adapter is not enabled");
+                                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                                PythonActivity.mActivity.startActivityForResult(enableBtIntent, EnableBtCode);
+                        }
                         return null;
                 }
                 return mBluetoothAdapter;
@@ -97,6 +111,10 @@ public class BLE {
                 new BluetoothAdapter.LeScanCallback() {
                         @Override
                         public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+                                if (mIsServiceContext) {
+                                        mPython.on_device(device, rssi, scanRecord);
+                                        return;
+                                }
                                 PythonActivity.mActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
