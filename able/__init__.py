@@ -23,7 +23,11 @@ class WriteType(IntEnum):
 
 
 if platform == 'android':
-    from able.android.dispatcher import BluetoothDispatcher
+    from able.android.dispatcher import (
+        BluetoothDispatcher,
+        require_bluetooth_enabled,
+        require_runtime_permissions,
+    )
 else:
 
     # mock android and PyJNIus modules usage
@@ -43,7 +47,11 @@ else:
     jnius.autoclass = mocked_autoclass()
     sys.modules['jnius'] = jnius
 
-    from able.dispatcher import BluetoothDispatcherBase
+    from able.dispatcher import (
+        BluetoothDispatcherBase,
+        require_bluetooth_enabled,
+        require_runtime_permissions,
+    )
 
     class BluetoothDispatcher(BluetoothDispatcherBase):
         """Bluetooth Low Energy interface

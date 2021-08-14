@@ -19,6 +19,21 @@ class BLEError(object):
         raise Exception(self.msg)
 
 
+def require_bluetooth_enabled(method):
+    """Decorator to start a system activity that allows the user
+    to turn on Bluetooth, if Bluetooth is not enabled.
+    Calls `BluetoothDispatcher` method when bluetooth adapter becomes ready.
+    """
+    return method
+
+
+def require_runtime_permissions(method):
+    """Decorator to ask for runtime permission to access location.
+    Calls `BluetoothDispatcher` method when permission is granted.
+    """
+    return method
+
+
 class BluetoothDispatcherBase(EventDispatcher):
     __events__ = (
         'on_device', 'on_scan_started', 'on_scan_completed', 'on_services',

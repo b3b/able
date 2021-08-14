@@ -27,7 +27,6 @@ DISABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
 
 
 def require_bluetooth_enabled(method):
-    """Decorator to execute `BluetoothDispatcher` method when bluetooth adapter becomes ready."""
 
     @wraps(method)
     def wrapper(self, *args, **kwargs):
@@ -37,6 +36,21 @@ def require_bluetooth_enabled(method):
             self._run_on_bluetooth_enabled = None
         else:
             Logger.debug("BLE adapter is not ready")
+
+    return wrapper
+
+
+def require_runtime_permissions(method):
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        self._run_on_runtime_permissions = partial(method, self, *args, **kwargs)
+        if self._is_service_context or self._check_runtime_permissions():
+            self._run_on_runtime_permissions()
+            self._run_on_runtime_permissions = None
+        else:
+            Logger.debug("Request runtime permissions")
+            self._request_runtime_permissions()
 
     return wrapper
 
@@ -74,11 +88,9 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
                            self.on_runtime_permissions)
 
     @require_bluetooth_enabled
+    @require_runtime_permissions
     def start_scan(self):
-        if self._is_service_context or self._check_runtime_permissions():
-            self._ble.startScan(self.enable_ble_code)
-        else:
-            self._request_runtime_permissions()
+        self._ble.startScan(self.enable_ble_code)
 
     def stop_scan(self):
         self._ble.stopScan()
@@ -117,23 +129,29 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
     def _set_name(self, value):
         self.adapter.setName(value)
 
-    def on_runtime_permissions(self, permissions, grant_results):
-        if permissions and all(grant_results):
-            self.start_scan()
-        else:
-            Logger.error(
-                'Permissions necessary to obtain scan results are not granted'
-            )
-            self.dispatch('on_scan_started', False)
-
     def on_activity_result(self, requestCode, resultCode, intent):
         if requestCode == self.enable_ble_code:
             self.on_bluetooth_enabled(resultCode == Activity.RESULT_OK)
 
     def on_bluetooth_enabled(self, enabled):
+        callback = self._run_on_bluetooth_enabled
+        self._run_on_bluetooth_enabled = None
         if enabled:
-            if self._run_on_bluetooth_enabled:
-                self._run_on_bluetooth_enabled()
-        elif self._run_on_bluetooth_enabled:
-            if self._run_on_bluetooth_enabled.func == self.start_scan:
+            if callback:
+                callback()
+        elif callback:
+            if callback.func == self.start_scan:
+                self.dispatch('on_scan_started', False)
+
+    def on_runtime_permissions(self, permissions, grant_results):
+        callback = self._run_on_runtime_permissions
+        self._run_on_runtime_permissions = None
+        if permissions and all(grant_results):
+            if callback:
+                callback()
+        else:
+            Logger.error(
+                'Permissions necessary to obtain scan results are not granted'
+            )
+            if callback.func == self.start_scan:
                 self.dispatch('on_scan_started', False)

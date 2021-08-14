@@ -41,6 +41,13 @@ BluetoothDispatcher
              on_rssi_updated,
              on_mtu_changed,
 
+Decorators
+""""""""""
+
+.. autofunction:: require_bluetooth_enabled
+.. autofunction:: require_runtime_permissions
+
+
 Advertisement
 """""""""""""
 
