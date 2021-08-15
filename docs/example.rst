@@ -94,3 +94,22 @@ Use iBeacon advertising format
   )
 
   Advertiser(BluetoothDispatcher(), data).start()
+
+
+Android Services
+----------------
+
+BLE devices scanning service
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+**main.py**
+
+.. literalinclude:: ./examples/service_main.py
+   :language: python
+
+**service.py**
+
+.. literalinclude:: ./examples/service_service.py
+   :language: python
+
+Full example code: `service_scan <https://github.com/b3b/able/blob/master/examples/service_scan/>`_
