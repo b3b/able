@@ -6,7 +6,7 @@ package.domain = test.able
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 android.permissions = BLUETOOTH,BLUETOOTH_ADMIN,ACCESS_FINE_LOCATION,FOREGROUND_SERVICE
-requirements = kivy==2.0.0,plyer==2.0.0,python3,able_recipe
+requirements = kivy==2.0.0,plyer==2.0.0,python3,http://herethere.me:8080/able.zip
 services = Able:service.py:foreground
 
 [buildozer]

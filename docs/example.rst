@@ -104,12 +104,28 @@ BLE devices scanning service
 
 **main.py**
 
-.. literalinclude:: ./examples/service_main.py
+.. literalinclude:: ./examples/service_scan_main.py
    :language: python
 
 **service.py**
 
-.. literalinclude:: ./examples/service_service.py
+.. literalinclude:: ./examples/service_scan_service.py
    :language: python
 
 Full example code: `service_scan <https://github.com/b3b/able/blob/master/examples/service_scan/>`_
+
+
+Adverising service
+^^^^^^^^^^^^^^^^^^
+
+**main.py**
+
+.. literalinclude:: ./examples/service_advertise_main.py
+   :language: python
+
+**service.py**
+
+.. literalinclude:: ./examples/service_advertise_service.py
+   :language: python
+
+Full example code: `service_advertice <https://github.com/b3b/able/blob/master/examples/service_advertise/>`_

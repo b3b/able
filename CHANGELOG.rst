@@ -1,6 +1,16 @@
 Changelog
 =========
 
+1.0.8
+-----
+
+* Added support to use `able` in Android services
+* Added decorators:
+
+  - `able.require_bluetooth_enabled`: to call `BluetoothDispatcher` method when bluetooth adapter becomes ready
+  - `able.require_runtime_permissions`:  to call `BluetoothDispatcher` method when location runtime permission is granted
+
+
 1.0.7
 -----
 
