@@ -115,8 +115,8 @@ BLE devices scanning service
 Full example code: `service_scan <https://github.com/b3b/able/blob/master/examples/service_scan/>`_
 
 
-Adverising service
-^^^^^^^^^^^^^^^^^^
+Advertising service
+^^^^^^^^^^^^^^^^^^^
 
 **main.py**
 

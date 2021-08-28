@@ -62,7 +62,7 @@ Thanks,
     `dgatf <https://github.com/dgatf>`_
     `dwmoffatt <https://github.com/dwmoffatt>`_
     `Enkumicahel <https://github.com/Enkumicahel>`_
-    `FalkorDev <https://github.com/FalkorDev>`_
+    `HelaFaye <https://github.com/HelaFaye>`_
     `jacklinquan <https://github.com/jacklinquan>`_
     `juasiepo <https://github.com/juasiepo>`_
     `PapoKarlo <https://github.com/PapoKarlo>`_
