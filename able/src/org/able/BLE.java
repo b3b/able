@@ -13,6 +13,10 @@ import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
+
 import android.os.Handler;
 import android.util.Log;
 import java.util.List;
@@ -26,6 +30,7 @@ public class BLE {
         private PythonBluetooth mPython;
         private Context mContext;
         private BluetoothAdapter mBluetoothAdapter;
+        private BluetoothLeScanner mBluetoothLeScanner;
         private BluetoothGatt mBluetoothGatt;
         private List<BluetoothGattService> mBluetoothGattServices;
         private boolean mScanning;
@@ -87,40 +92,60 @@ public class BLE {
                 BluetoothAdapter adapter = getAdapter(EnableBtCode);
                 if (adapter != null) {
                     Log.d(TAG, "BLE adapter is ready for scan");
-                    if (adapter.startLeScan(mLeScanCallback)) {
-                            Log.d(TAG, "BLE scan started successfully");
-                            mScanning = true;
-                            mPython.on_scan_started(true);
+                    if (mBluetoothLeScanner == null) {
+                            mBluetoothLeScanner = adapter.getBluetoothLeScanner();
+                    }
+                    if (mBluetoothLeScanner != null) {
+                            mScanning = false;
+                            mBluetoothLeScanner.startScan(mScanCallback);
                     } else {
-                            Log.d(TAG, "BLE scan not started");
+                            showError("Could not get BLE Scanner object.");
                             mPython.on_scan_started(false);
                     }
                 }
         }
 
         public void stopScan() {
-                if (mScanning == true) {
+                if (mBluetoothLeScanner != null) {
                         Log.d(TAG, "stopScan");
-                        mScanning = false;
-                        mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                        mPython.on_scan_completed();
+                        mBluetoothLeScanner.stopScan(mScanCallback);
+                        if (mScanning) {
+                                mScanning = false;
+                                mPython.on_scan_completed();
+                        }
                 }
         }
 
-        private BluetoothAdapter.LeScanCallback mLeScanCallback =
-                new BluetoothAdapter.LeScanCallback() {
+        private final ScanCallback mScanCallback =
+                new ScanCallback() {
                         @Override
-                        public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+                        public void onScanResult(final int callbackType, final ScanResult result) {
+                                if (!mScanning) {
+                                        mScanning = true;
+                                        Log.d(TAG, "BLE scan started successfully");
+                                        mPython.on_scan_started(true);
+                                }
                                 if (mIsServiceContext) {
-                                        mPython.on_device(device, rssi, scanRecord);
+                                        mPython.on_scan_result(result);
                                         return;
                                 }
                                 PythonActivity.mActivity.runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                        mPython.on_device(device, rssi, scanRecord);
+                                                        mPython.on_scan_result(result);
                                                 }
                                         });
+                        }
+
+                        @Override
+                        public void onBatchScanResults(List<ScanResult> results) {
+                                Log.d(TAG, "onBatchScanResults");
+                        }
+
+                        @Override
+                        public void onScanFailed(int errorCode) {
+                                Log.e(TAG, "BLE Scan failed, error code:" + errorCode);
+                                mPython.on_scan_started(false);
                         }
                 };
 

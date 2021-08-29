@@ -17,10 +17,23 @@ class PythonBluetooth(PythonJavaClass):
         Logger.debug("on_error")
         self.dispatcher.dispatch('on_error', msg)
 
-    @java_method('(Landroid/bluetooth/BluetoothDevice;I[B)V')
-    def on_device(self, device, rssi, record):
-        self.dispatcher.dispatch('on_device', device, rssi,
-                                 Advertisement(record))
+    @java_method('(Landroid/bluetooth/le/ScanResult;)V')
+    def on_scan_result(self, result):
+        device = result.getDevice()  # type: android.bluetooth.BluetoothDevice
+        record = result.getScanRecord()  # type: android.bluetooth.le.ScanRecord
+        if record:
+            self.dispatcher.dispatch(
+                'on_device',
+                device,
+                result.getRssi(),
+                Advertisement(record.getBytes())
+            )
+        else:
+            Logger.warning(
+                "Scan result for device without the scan record: %s",
+                device
+            )
+
 
     @java_method('(Z)V')
     def on_scan_started(self, success):
