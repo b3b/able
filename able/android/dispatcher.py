@@ -14,12 +14,19 @@ from able.android.jni import PythonBluetooth
 from able.dispatcher import BluetoothDispatcherBase
 
 
+ArrayList = autoclass('java.util.ArrayList')
+
 Activity = autoclass('android.app.Activity')
 BLE = autoclass('org.able.BLE')
 
 BluetoothAdapter = autoclass('android.bluetooth.BluetoothAdapter')
 BluetoothDevice = autoclass('android.bluetooth.BluetoothDevice')
 BluetoothGattDescriptor = autoclass('android.bluetooth.BluetoothGattDescriptor')
+
+ScanFilter = autoclass('android.bluetooth.le.ScanFilter')
+ScanFilterBuilder = autoclass('android.bluetooth.le.ScanFilter$Builder')
+ScanSettings = autoclass('android.bluetooth.le.ScanSettings')
+ScanSettingsBuilder = autoclass('android.bluetooth.le.ScanSettings$Builder')
 
 ENABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 ENABLE_INDICATION_VALUE = BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
@@ -89,8 +96,12 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
 
     @require_bluetooth_enabled
     @require_runtime_permissions
-    def start_scan(self):
-        self._ble.startScan(self.enable_ble_code)
+    def start_scan(self, filters=None, settings=None):
+        if not filters:
+            filters = ArrayList()
+        if not settings:
+            settings = ScanSettingsBuilder().build()
+        self._ble.startScan(self.enable_ble_code, filters, settings)
 
     def stop_scan(self):
         self._ble.stopScan()

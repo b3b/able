@@ -104,7 +104,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         self.queue_timeout = timeout
         self.queue.set_timeout(timeout)
 
-    def start_scan(self):
+    def start_scan(self, filters=None, settings=None):
         """Start a scan for devices.
         Ask for runtime permission to access location.
         Start a system activity that allows the user to turn on Bluetooth,

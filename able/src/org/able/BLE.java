@@ -17,6 +17,9 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 
+import android.bluetooth.le.ScanFilter;
+import android.bluetooth.le.ScanSettings;
+
 import android.os.Handler;
 import android.util.Log;
 import java.util.List;
@@ -87,7 +90,9 @@ public class BLE {
                 return mBluetoothGatt;
         }
 
-        public void startScan(int EnableBtCode) {
+        public void startScan(int EnableBtCode,
+                              List<ScanFilter> filters,
+                              ScanSettings settings) {
                 Log.d(TAG, "startScan");
                 BluetoothAdapter adapter = getAdapter(EnableBtCode);
                 if (adapter != null) {
@@ -97,7 +102,7 @@ public class BLE {
                     }
                     if (mBluetoothLeScanner != null) {
                             mScanning = false;
-                            mBluetoothLeScanner.startScan(mScanCallback);
+                            mBluetoothLeScanner.startScan(filters, settings, mScanCallback);
                     } else {
                             showError("Could not get BLE Scanner object.");
                             mPython.on_scan_started(false);

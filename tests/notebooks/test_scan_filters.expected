@@ -1,0 +1,18 @@
+[[setup]]
+= Setup
+
+[[test-device-is-found-with-filter-by-name]]
+= Test device is found with filter by name
+
+
+----
+{'KivyBLETest'}
+----
+
+[[test-device-is-not-found-filtered-out-by-name]]
+= Test device is not found: filtered out by name
+
+
+----
+[]
+----
