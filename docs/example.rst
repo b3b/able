@@ -75,8 +75,10 @@ Use iBeacon advertising format
 
 .. code-block:: python
 
+  import uuid
   from able import BluetoothDispatcher
-  from able.advertising import Advertiser, AdvertiseData
+  from able.advertising import Advertiser, AdvertiseData, ManufacturerData
+
 
   data = AdvertiseData(
       ManufacturerData(
