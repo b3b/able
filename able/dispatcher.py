@@ -1,9 +1,10 @@
-from typing import Optional
+from typing import List, Optional
 
 from kivy.event import EventDispatcher
 from kivy.logger import Logger
 
 from able import WriteType
+from able.filters import Filter
 from able.queue import BLEQueue, ble_task, ble_task_done
 from able.utils import force_convertible_to_java_array
 
@@ -104,13 +105,15 @@ class BluetoothDispatcherBase(EventDispatcher):
         self.queue_timeout = timeout
         self.queue.set_timeout(timeout)
 
-    def start_scan(self, filters=None, settings=None):
+    def start_scan(self, filters: Optional[List[Filter]]=None, settings=None):
         """Start a scan for devices.
         Ask for runtime permission to access location.
         Start a system activity that allows the user to turn on Bluetooth,
         if Bluetooth is not enabled.
         The status of the scan start are reported with
         :func:`scan_started <on_scan_started>` event.
+
+        :param filters: list of filters to restrict scan results
         """
         pass
 

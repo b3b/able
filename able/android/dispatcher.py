@@ -97,11 +97,12 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
     @require_bluetooth_enabled
     @require_runtime_permissions
     def start_scan(self, filters=None, settings=None):
-        if not filters:
-            filters = ArrayList()
+        filters_array = ArrayList()
+        for f in filters:
+            filters_array.add(f.build())
         if not settings:
             settings = ScanSettingsBuilder().build()
-        self._ble.startScan(self.enable_ble_code, filters, settings)
+        self._ble.startScan(self.enable_ble_code, filters_array, settings)
 
     def stop_scan(self):
         self._ble.stopScan()
