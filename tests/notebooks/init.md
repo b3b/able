@@ -15,26 +15,26 @@ jupyter:
 
 ```python
 from time import sleep
-
-from dataclasses import dataclass, field
-from typing import List
-
 %load_ext pythonhere
 %connect-there
 ```
 
 ```python
 %%there
+from dataclasses import dataclass, field
+from typing import List
+
+from jnius import autoclass, cast
+
 from able.android.dispatcher import (
-    ArrayList,
-    BluetoothDispatcher,
-    ScanFilterBuilder,
+    BluetoothDispatcher
+)
+
+from able.scan_settings import (
+    ScanSettings,
     ScanSettingsBuilder
 )
-```
 
-```python
-%%there
 @dataclass
 class Results:
     started: bool = None

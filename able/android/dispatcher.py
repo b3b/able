@@ -12,7 +12,7 @@ from kivy.logger import Logger
 
 from able.android.jni import PythonBluetooth
 from able.dispatcher import BluetoothDispatcherBase
-
+from able.scan_settings import ScanSettingsBuilder
 
 ArrayList = autoclass('java.util.ArrayList')
 
@@ -22,11 +22,6 @@ BLE = autoclass('org.able.BLE')
 BluetoothAdapter = autoclass('android.bluetooth.BluetoothAdapter')
 BluetoothDevice = autoclass('android.bluetooth.BluetoothDevice')
 BluetoothGattDescriptor = autoclass('android.bluetooth.BluetoothGattDescriptor')
-
-ScanFilter = autoclass('android.bluetooth.le.ScanFilter')
-ScanFilterBuilder = autoclass('android.bluetooth.le.ScanFilter$Builder')
-ScanSettings = autoclass('android.bluetooth.le.ScanSettings')
-ScanSettingsBuilder = autoclass('android.bluetooth.le.ScanSettings$Builder')
 
 ENABLE_NOTIFICATION_VALUE = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
 ENABLE_INDICATION_VALUE = BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
@@ -98,10 +93,14 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
     @require_runtime_permissions
     def start_scan(self, filters=None, settings=None):
         filters_array = ArrayList()
-        for f in filters:
+        for f in filters or []:
             filters_array.add(f.build())
         if not settings:
-            settings = ScanSettingsBuilder().build()
+            settings = ScanSettingsBuilder()
+        try:
+            settings = settings.build()
+        except AttributeError:
+            pass
         self._ble.startScan(self.enable_ble_code, filters_array, settings)
 
     def stop_scan(self):

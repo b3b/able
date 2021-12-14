@@ -44,7 +44,7 @@ ble = BLE()
 %%there
 results =  Results()
 ble.start_scan(
-    settings=ScanSettingsBuilder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER).build()
+    settings=ScanSettingsBuilder().setScanMode(ScanSettings.SCAN_MODE_LOW_POWER)
 )
 ```
 
@@ -74,7 +74,7 @@ print(low_power_advertisement_count > 0)
 results =  Results()
 
 ble.start_scan(
-    settings=ScanSettingsBuilder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
+    settings=ScanSettingsBuilder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
 )
 ```
 

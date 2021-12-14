@@ -7,6 +7,7 @@ from able import WriteType
 from able.filters import Filter
 from able.queue import BLEQueue, ble_task, ble_task_done
 from able.utils import force_convertible_to_java_array
+from able.scan_settings import ScanSettingsBuilder
 
 
 class BLEError(object):
@@ -105,7 +106,11 @@ class BluetoothDispatcherBase(EventDispatcher):
         self.queue_timeout = timeout
         self.queue.set_timeout(timeout)
 
-    def start_scan(self, filters: Optional[List[Filter]]=None, settings=None):
+    def start_scan(
+            self,
+            filters: Optional[List[Filter]]=None,
+            settings: Optional[ScanSettingsBuilder]=None
+    ):
         """Start a scan for devices.
         Ask for runtime permission to access location.
         Start a system activity that allows the user to turn on Bluetooth,
@@ -114,6 +119,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         :func:`scan_started <on_scan_started>` event.
 
         :param filters: list of filters to restrict scan results
+        :param settings: scan settings
         """
         pass
 
