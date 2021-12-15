@@ -118,7 +118,9 @@ class BluetoothDispatcherBase(EventDispatcher):
         The status of the scan start are reported with
         :func:`scan_started <on_scan_started>` event.
 
-        :param filters: list of filters to restrict scan results
+        :param filters: list of filters to restrict scan results.
+                        Advertising record is considered matching the filters
+                        if it matches any of the :class:`able.filters.Filter` in the list.
         :param settings: scan settings
         """
         pass

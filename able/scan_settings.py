@@ -8,7 +8,6 @@ if platform != 'android':
     class ScanSettings:
         """PyJNIus wrapper for Java class `android.bluetooth.le.ScanSettings`.
         https://developer.android.com/reference/android/bluetooth/le/ScanSettings
-
         """
 
     class ScanSettingsBuilder:

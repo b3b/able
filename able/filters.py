@@ -1,5 +1,6 @@
 """BLE scanning filters,
-wrappers for Java https://developer.android.com/reference/android/bluetooth/le/ScanFilter.Builder
+wrappers for Java class `android.bluetooth.le.ScanFilter.Builder`
+https://developer.android.com/reference/android/bluetooth/le/ScanFilter.Builder
 """
 from abc import abstractmethod
 from dataclasses import dataclass, field
@@ -48,6 +49,7 @@ class Filter:
 
 
 class EmptyFilter(Filter):
+    """Filter with no restrictions."""
 
     def filter(self, builder):
         pass
@@ -98,14 +100,15 @@ class ManufacturerDataFilter(Filter):
                  set it to 1 if it needs to match the one in manufacturer data,
                  otherwise set it to 0 to ignore that bit.
 
-    # Filter by just ID, ignoring the data:
+
+    >>> # Filter by just ID, ignoring the data:
     >>> ManufacturerDataFilter(0x0AD0, [])
     ManufacturerDataFilter(id=2768, data=[], mask=None)
 
     >>> ManufacturerDataFilter(0x0AD0, [0x2, 0x15, 0x8d])
     ManufacturerDataFilter(id=2768, data=[2, 21, 141], mask=None)
 
-    # With mask set to ignore the second data byte:
+    >>> # With mask set to ignore the second data byte:
     >>> ManufacturerDataFilter(0x0AD0, [0x2, 0, 0x8d], [0xff, 0, 0xff])
     ManufacturerDataFilter(id=2768, data=[2, 0, 141], mask=[255, 0, 255])
 
@@ -144,7 +147,7 @@ class ServiceDataFilter(Filter):
     >>> ServiceDataFilter("0000180f-0000-1000-8000-00805f9b34fb", [])
     ServiceDataFilter(uid='0000180f-0000-1000-8000-00805f9b34fb', data=[], mask=None)
 
-    # With mask set to ignore the first data byte:
+    >>> # With mask set to ignore the first data byte:
     >>> ServiceDataFilter("0000180f-0000-1000-8000-00805f9b34fb", [0, 0x11], [0, 0xff])
     ServiceDataFilter(uid='0000180f-0000-1000-8000-00805f9b34fb', data=[0, 17], mask=[0, 255])
 

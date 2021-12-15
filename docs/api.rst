@@ -71,6 +71,31 @@ Constants
    :members:
 
 
+Scan settings
+^^^^^^^^^^^^^
+
+.. automodule:: able.scan_settings
+.. autoclass:: ScanSettingsBuilder
+.. autoclass:: ScanSettings
+
+
+>>> settings = ScanSettingsBuilder() \
+...  .setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE) \
+...  .setCallbackType(
+...     ScanSettings.CALLBACK_TYPE_FIRST_MATCH |
+...     ScanSettings.CALLBACK_TYPE_MATCH_LOST
+...   )
+
+
+Scan filters
+^^^^^^^^^^^^
+
+.. automodule:: able.filters
+   :members:
+   :member-order: bysource
+   :show-inheritance:
+
+
 Advertising
 ^^^^^^^^^^^
 

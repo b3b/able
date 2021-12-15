@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.0.9
+-----
+
+* Switched from deprecated scanning method `BluetoothAdapter.startLeScan` to `BluetoothLeScanner.startScan`
+* Added support for BLE scanning settings: `able.scan_settings` module
+* Added support for BLE scanning filters: `able.filters` module
+
+
 1.0.8
 -----
 

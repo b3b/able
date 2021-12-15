@@ -14,6 +14,47 @@ Change MTU
    :language: python
 
 
+Scan settings
+-------------
+
+.. code-block:: python
+
+  from able import BluetoothDispatcher
+  from able.scan_settings import ScanSettingsBuilder, ScanSettings
+
+  # Use faster detection (more power usage) mode
+  settings = ScanSettingsBuilder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+  BluetoothDispatcher().start_scan(settings=settings)
+
+
+Scan filters
+------------
+
+.. code-block:: python
+
+  from able import BluetoothDispatcher
+  from able.filters import (
+      DeviceAddressFilter,
+      DeviceNameFilter,
+      ManufacturerDataFilter,
+      ServiceDataFilter,
+      ServiceUUIDFilter
+  )
+
+  ble = BluetoothDispatcher()
+
+  # Start scanning with the condition that device has one of names: "Device1" or "Device2"
+  ble.start_scan(filters=[DeviceNameFilter("Device1"), DeviceNameFilter("Device2")])
+  ble.stop_scan()
+
+  # Start scanning with the condition that
+  # device advertises "180f" service and one of names: "Device1" or "Device2"
+  ble.start_scan(filters=[
+      ServiceUUIDFilter('0000180f-0000-1000-8000-00805f9b34fb') & DeviceNameFilter("Device1"),
+      ServiceUUIDFilter('0000180f-0000-1000-8000-00805f9b34fb') & DeviceNameFilter("Device2")
+  ])
+
+
 Advertising
 -----------
 
