@@ -16,11 +16,23 @@ ScanFilterBuilder = autoclass('android.bluetooth.le.ScanFilter$Builder')
 
 @dataclass
 class Filter:
+    """Base class for BLE scanning fiters.
+
+    >>> # Filters of different kinds could be ANDed to set multiple conditions.
+    >>> # Both device name and address required:
+    >>> combined_filter = DeviceNameFilter("Example") & DeviceAddressFilter("01:02:03:AB:CD:EF")
+
+    >>> DeviceNameFilter("Example1") & DeviceNameFilter("Example2")
+    Traceback (most recent call last):
+    ValueError: cannot combine filters of the same type
+    """
 
     def __post_init__(self):
         self.filters = [self]
 
     def __and__(self, other):
+        if type(self) in (type(f) for f in other.filters):
+            raise ValueError('cannot combine filters of the same type')
         self.filters.extend(other.filters)
         return self
 
