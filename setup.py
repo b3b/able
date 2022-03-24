@@ -1,5 +1,5 @@
 import os
-from os.path import dirname
+from pathlib import Path
 from setuptools import setup, convert_path
 from setuptools.command.install import install
 
@@ -10,6 +10,55 @@ with open(convert_path('able/version.py')) as ver_file:
 
 with open(convert_path('README.rst')) as readme_file:
     long_description = readme_file.read()
+
+
+
+class PathParser():
+
+    @property
+    def javaclass_dir(self):
+        path = self.build_dir / 'javaclasses'
+        if not path.exists():
+            raise Exception(
+                'Java classes directory is not found. '
+                'Please report issue to: https://github.com/b3b/able/issues'
+            )
+        path = path / self.distribution_name
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+    @property
+    def distribution_name(self):
+        path = self.python_path
+        while path.parent.name != 'python-installs':
+            if len(path.parts) <= 1:
+                raise Exception(
+                    'Distribution name is not found. '
+                    'Please report issue to: https://github.com/b3b/able/issues'
+                    )
+            path = path.parent
+        return path.name
+
+    @property
+    def build_dir(self):
+        return self.python_installs_dir.parent
+
+    @property
+    def python_installs_dir(self):
+        path = self.python_path.parent
+        while path.name != 'python-installs':
+            if len(path.parts) <= 1:
+                raise Exception(
+                    'Python installs directory is not found. '
+                    'Please report issue to: https://github.com/b3b/able/issues'
+                    )
+            path = path.parent
+        return path
+
+    @property
+    def python_path(self):
+        return Path(os.environ['PYTHONPATH'].split(':')[-1])
+
 
 
 class InstallRecipe(install):
@@ -24,23 +73,7 @@ class InstallRecipe(install):
             )
 
         # Find Java classes target directory from the environment
-        distribution_dir = os.environ['PYTHONPATH'].split(':')[-1]
-        distribution_name = distribution_dir.split('/')[-1]
-        javaclass_dir = os.path.join(
-            dirname(dirname(distribution_dir)),
-            'javaclasses'
-        )
-
-        if not os.path.exists(javaclass_dir):
-            raise Exception(
-                'javaclasses directory is not found. '
-                'Please report issue to: https://github.com/b3b/able/issues'
-            )
-
-        javaclass_dir = os.path.join(javaclass_dir,
-                                     distribution_name, 'org', 'able')
-        if not os.path.exists(javaclass_dir):
-            os.makedirs(javaclass_dir)
+        javaclass_dir = str(PathParser().javaclass_dir)
 
         self.distribution.data_files = [
             (javaclass_dir, [

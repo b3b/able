@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.10
+------
+
+* Fixed build failure after AAB support was added to python-for-android
+
 1.0.9
 -----
 
