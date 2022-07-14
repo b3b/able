@@ -173,14 +173,13 @@ public class BLE {
                 new BluetoothGattCallback() {
                         @Override
                         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-                                if (mBluetoothGatt == null) {
-                                    mBluetoothGatt = gatt;
-                                }
                                 if (newState == BluetoothProfile.STATE_CONNECTED) {
                                         Log.d(TAG, "Connected to GATT server, status:" + status);
                                 } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                                         Log.d(TAG, "Disconnected from GATT server, status:" + status);
-                                        closeGatt();
+                                }
+                                if (mBluetoothGatt == null) {
+                                        mBluetoothGatt = gatt;
                                 }
                                 mPython.on_connection_state_change(status, newState);
                         }
