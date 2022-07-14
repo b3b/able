@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.11
+------
+
+* Improved logging of reconnection management
+  `#33 <https://github.com/b3b/able/pull/33>`_ by `robgar2001 <https://github.com/robgar2001>`_
+
 1.0.10
 ------
 
