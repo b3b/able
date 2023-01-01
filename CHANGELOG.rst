@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.0.12
+------
+
+* Fixed crash on API level 31 (Android 12) `#37 <https://github.com/b3b/able/issues/37>`_
+* Added new optional `BluetoothDispatcher` parameter to specifiy required permissions: `runtime_permissions`.
+  Runtime permissions that are required by by default:
+  ACCESS_FINE_LOCATION, BLUETOOTH_SCAN, BLUETOOTH_CONNECT, BLUETOOTH_ADVERTISE
+* Changed `able.require_bluetooth_enabled` behavior: first asks for runtime permissions
+  and if permissions are granted then offers to enable the adapter
+* `require_runtime_permissions` decorator deprecated
+
 1.0.11
 ------
 

@@ -4,15 +4,16 @@ from kivy.event import EventDispatcher
 from kivy.logger import Logger
 
 from able import WriteType
+from able.adapter import AdapterManager
 from able.filters import Filter
+from able.permissions import DEFAULT_RUNTIME_PERMISSIONS
 from able.queue import BLEQueue, ble_task, ble_task_done
-from able.utils import force_convertible_to_java_array
 from able.scan_settings import ScanSettingsBuilder
+from able.utils import force_convertible_to_java_array
 
 
-class BLEError(object):
-    """raise Exception on attribute access
-    """
+class BLEError:
+    """Raise Exception on attribute access"""
 
     def __init__(self, msg):
         self.msg = msg
@@ -21,45 +22,59 @@ class BLEError(object):
         raise Exception(self.msg)
 
 
-def require_bluetooth_enabled(method):
-    """Decorator to start a system activity that allows the user
-    to turn on Bluetooth, if Bluetooth is not enabled.
-    Calls `BluetoothDispatcher` method when bluetooth adapter becomes ready.
-    """
-    return method
-
-
-def require_runtime_permissions(method):
-    """Decorator to ask for runtime permission to access location.
-    Calls `BluetoothDispatcher` method when permission is granted.
-    """
-    return method
-
-
 class BluetoothDispatcherBase(EventDispatcher):
     __events__ = (
-        'on_device', 'on_scan_started', 'on_scan_completed', 'on_services',
-        'on_connection_state_change', 'on_characteristic_changed',
-        'on_characteristic_read', 'on_characteristic_write',
-        'on_descriptor_read', 'on_descriptor_write',
-        'on_gatt_release', 'on_error', 'on_rssi_updated', 'on_mtu_changed',
+        "on_device",
+        "on_scan_started",
+        "on_scan_completed",
+        "on_services",
+        "on_connection_state_change",
+        "on_characteristic_changed",
+        "on_characteristic_read",
+        "on_characteristic_write",
+        "on_descriptor_read",
+        "on_descriptor_write",
+        "on_gatt_release",
+        "on_error",
+        "on_rssi_updated",
+        "on_mtu_changed",
     )
     queue_class = BLEQueue
 
-    def __init__(self, queue_timeout=0.5, enable_ble_code=0xab1e):
+    def __init__(
+        self,
+        queue_timeout: float = 0.5,
+        enable_ble_code: int = 0xAB1E,
+        runtime_permissions: Optional[list[str]] = None,  # DEFAULT_RUNTIME_PERMISSIONS
+    ):
         super(BluetoothDispatcherBase, self).__init__()
         self.queue_timeout = queue_timeout
         self.enable_ble_code = enable_ble_code
+        self.runtime_permissions = [
+            str(permission)
+            for permission in (
+                runtime_permissions
+                if runtime_permissions is not None
+                else DEFAULT_RUNTIME_PERMISSIONS
+            )
+        ]
         self._remote_device_address = None
-        self._run_on_bluetooth_enabled = None
         self._set_ble_interface()
         self._set_queue()
+        self._set_adapter_manager()
 
     def _set_ble_interface(self):
-        self._ble = BLEError('BLE is not implemented for platform')
+        self._ble = BLEError("BLE is not implemented for platform")
 
     def _set_queue(self):
         self.queue = self.queue_class(timeout=self.queue_timeout)
+
+    def _set_adapter_manager(self):
+        AdapterManager(
+            ble=self._ble,
+            enable_ble_code=self.enable_ble_code,
+            runtime_permissions=self.runtime_permissions,
+        ).install(self)
 
     def _check_runtime_permissions(self):
         return True
@@ -101,15 +116,14 @@ class BluetoothDispatcherBase(EventDispatcher):
         pass
 
     def set_queue_timeout(self, timeout):
-        """Change the BLE operations queue timeout
-        """
+        """Change the BLE operations queue timeout"""
         self.queue_timeout = timeout
         self.queue.set_timeout(timeout)
 
     def start_scan(
-            self,
-            filters: Optional[List[Filter]]=None,
-            settings: Optional[ScanSettingsBuilder]=None
+        self,
+        filters: Optional[List[Filter]] = None,
+        settings: Optional[ScanSettingsBuilder] = None,
     ):
         """Start a scan for devices.
         Ask for runtime permission to access location.
@@ -126,8 +140,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         pass
 
     def stop_scan(self):
-        """Stop the ongoing scan for devices.
-        """
+        """Stop the ongoing scan for devices."""
         pass
 
     def connect_by_device_address(self, address: str):
@@ -141,13 +154,11 @@ class BluetoothDispatcherBase(EventDispatcher):
         pass
 
     def connect_gatt(self, device):
-        """Connect to GATT Server hosted by device
-        """
+        """Connect to GATT Server hosted by device"""
         self._ble.connectGatt(device)
 
     def close_gatt(self):
-        """Close current GATT client
-        """
+        """Close current GATT client"""
         self._ble.closeGatt()
 
     def discover_services(self):
@@ -184,7 +195,9 @@ class BluetoothDispatcherBase(EventDispatcher):
             Logger.error("Error on descriptor write")
 
     @ble_task
-    def write_characteristic(self, characteristic, value, write_type: Optional[WriteType] = None):
+    def write_characteristic(
+        self, characteristic, value, write_type: Optional[WriteType] = None
+    ):
         """Write a given characteristic value to the associated remote device
 
         :param characteristic: BluetoothGattCharacteristic Java object
@@ -192,9 +205,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         :param write_type: specific write type to set for the characteristic
         """
         self._ble.writeCharacteristic(
-            characteristic,
-            force_convertible_to_java_array(value),
-            int(write_type or 0)
+            characteristic, force_convertible_to_java_array(value), int(write_type or 0)
         )
 
     @ble_task
@@ -207,8 +218,7 @@ class BluetoothDispatcherBase(EventDispatcher):
 
     @ble_task
     def update_rssi(self):
-        """Triggers an update for the RSSI from the associated remote device
-        """
+        """Triggers an update for the RSSI from the associated remote device"""
         self._ble.readRemoteRssi()
 
     @ble_task
@@ -242,8 +252,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         pass
 
     def on_scan_completed(self):
-        """`scan_completed` event handler
-        """
+        """`scan_completed` event handler"""
         pass
 
     def on_device(self, device, rssi, advertisement):

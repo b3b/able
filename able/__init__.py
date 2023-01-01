@@ -4,9 +4,11 @@ from able.structures import Advertisement, Services
 from able.version import __version__  # noqa
 from kivy.utils import platform
 
-__all__ = ('Advertisement',
-           'BluetoothDispatcher',
-           'Services',)
+__all__ = (
+    "Advertisement",
+    "BluetoothDispatcher",
+    "Services",
+)
 
 # constants
 GATT_SUCCESS = 0  #: GATT operation completed successfully
@@ -15,43 +17,38 @@ STATE_DISCONNECTED = 0  #: The profile is in disconnected state
 
 
 class WriteType(IntEnum):
-    """GATT characteristic write types constants.
-    """
+    """GATT characteristic write types constants."""
+
     DEFAULT = 2  #: Write characteristic, requesting acknoledgement by the remote device
-    NO_RESPONSE = 1  #: Write characteristic without requiring a response by the remote device
+    NO_RESPONSE = (
+        1  #: Write characteristic without requiring a response by the remote device
+    )
     SIGNED = 4  #: Write characteristic including authentication signature
 
 
-if platform == 'android':
-    from able.android.dispatcher import (
-        BluetoothDispatcher,
-        require_bluetooth_enabled,
-        require_runtime_permissions,
-    )
+if platform == "android":
+    from able.android.dispatcher import BluetoothDispatcher
 else:
 
     # mock android and PyJNIus modules usage
     import sys
     from unittest.mock import Mock
-    sys.modules['android'] = Mock()
-    sys.modules['android.permissions'] = Mock()
+
+    sys.modules["android"] = Mock()
+    sys.modules["android.permissions"] = Mock()
     jnius = Mock()
 
     class mocked_autoclass(Mock):
-
         def __call__(self, *args, **kwargs):
             mock = Mock()
             mock.__repr__ = lambda s: f"jnius.autoclass('{args[0]}')"
+            mock.SDK_INT = 255
             return mock
 
     jnius.autoclass = mocked_autoclass()
-    sys.modules['jnius'] = jnius
+    sys.modules["jnius"] = jnius
 
-    from able.dispatcher import (
-        BluetoothDispatcherBase,
-        require_bluetooth_enabled,
-        require_runtime_permissions,
-    )
+    from able.dispatcher import BluetoothDispatcherBase
 
     class BluetoothDispatcher(BluetoothDispatcherBase):
         """Bluetooth Low Energy interface
@@ -59,4 +56,16 @@ else:
         :param queue_timeout: BLE operations queue timeout
         :param enable_ble_code: request code to identify activity that alows
                user to turn on :func:`Bluetooth <start_scan>`
+        :param runtime_permissions: overridden list of
+               :class:`permissions <able.Permission>`
+               to be requested on runtime.
         """
+
+
+from able.adapter import require_bluetooth_enabled
+from able.permissions import Permission
+
+
+def require_runtime_permissions(method):
+    """Deprecated decorator, left for backwards compatibility."""
+    return method

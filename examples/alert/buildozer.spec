@@ -1,12 +1,25 @@
 [app]
 title = Alert Mi
-version = 1.0
+version = 1.1
 package.name = alert_mi
 package.domain = org.kivy
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
-android.permissions = BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_FINE_LOCATION
+
 requirements = python3,kivy,android,able_recipe
+
+android.accept_sdk_license = True
+android.permissions =
+    BLUETOOTH,
+    BLUETOOTH_ADMIN,
+    BLUETOOTH_SCAN,
+    BLUETOOTH_CONNECT,
+    BLUETOOTH_ADVERTISE,
+    ACCESS_FINE_LOCATION
+
+# android.api = 31
+# android.minapi = 31
+
 
 [buildozer]
 warn_on_root = 1
