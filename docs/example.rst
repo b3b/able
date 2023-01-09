@@ -90,7 +90,7 @@ Set and advertise device name
 .. code-block:: python
 
   from able import BluetoothDispatcher
-  from able.advertising import Advertiser, AdvertiseData
+  from able.advertising import Advertiser, AdvertiseData, DeviceName
 
   ble = BluetoothDispatcher()
   ble.name = "New test device name"

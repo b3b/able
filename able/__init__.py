@@ -55,9 +55,9 @@ else:
 
         :param queue_timeout: BLE operations queue timeout
         :param enable_ble_code: request code to identify activity that alows
-               user to turn on :func:`Bluetooth <start_scan>`
+               user to turn on Bluetooth adapter
         :param runtime_permissions: overridden list of
-               :class:`permissions <able.Permission>`
+               :py:mod:`permissions <able.permissions>`
                to be requested on runtime.
         """
 

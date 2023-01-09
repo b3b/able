@@ -10,7 +10,8 @@ BluetoothDispatcher
 """""""""""""""""""
 
 .. autoclass:: BluetoothDispatcher
-   :members: gatt,
+   :members: adapter,
+             gatt,
              bonded_devices,
              name,
              set_queue_timeout,
@@ -45,7 +46,6 @@ Decorators
 """"""""""
 
 .. autofunction:: require_bluetooth_enabled
-.. autofunction:: require_runtime_permissions
 
 
 Advertisement
@@ -69,6 +69,16 @@ Constants
 .. autodata:: STATE_DISCONNECTED
 .. autoclass:: WriteType
    :members:
+
+Permissions
+^^^^^^^^^^^
+
+.. automodule:: able.permissions
+.. automodule:: able
+.. autoclass:: Permission
+   :members:
+   :undoc-members:
+   :member-order: bysource
 
 
 Scan settings

@@ -83,6 +83,15 @@ class BluetoothDispatcherBase(EventDispatcher):
         pass
 
     @property
+    def adapter(self) -> Optional["android.bluetooth.BluetoothAdapter"]:
+        """Local device Bluetooth adapter.
+        Could be `None` if adapter is not enabled or access to the adapter is not granted yet.
+
+        :type: `BluetoothAdapter <https://developer.android.com/reference/android/bluetooth/BluetoothAdapter>`_
+               `Java object <https://pyjnius.readthedocs.io/en/stable/api.html#jnius.JavaClass>`_
+        """
+
+    @property
     def gatt(self):
         """GATT profile of the connected device
 
@@ -126,9 +135,6 @@ class BluetoothDispatcherBase(EventDispatcher):
         settings: Optional[ScanSettingsBuilder] = None,
     ):
         """Start a scan for devices.
-        Ask for runtime permission to access location.
-        Start a system activity that allows the user to turn on Bluetooth,
-        if Bluetooth is not enabled.
         The status of the scan start are reported with
         :func:`scan_started <on_scan_started>` event.
 
@@ -145,7 +151,6 @@ class BluetoothDispatcherBase(EventDispatcher):
 
     def connect_by_device_address(self, address: str):
         """Connect to GATT Server of the device with a given Bluetooth hardware address, without scanning.
-        Start a system activity that allows the user to turn on Bluetooth if Bluetooth is not enabled.
 
         :param address: Bluetooth hardware address string in "XX:XX:XX:XX:XX:XX" format
         :raises:
