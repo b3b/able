@@ -1,5 +1,8 @@
 """Start BLE devices scaning service."""
-from able import BluetoothDispatcher, require_bluetooth_enabled, require_runtime_permissions
+from able import (
+    BluetoothDispatcher,
+    require_bluetooth_enabled,
+)
 from jnius import autoclass
 from kivy.app import App
 from kivy.lang import Builder
@@ -17,10 +20,9 @@ BoxLayout:
 
 
 class Dispatcher(BluetoothDispatcher):
-
     @property
     def service(self):
-        return autoclass("test.able.service.ServiceAble")
+        return autoclass("test.able.scanservice.ServiceAble")
 
     @property
     def activity(self):
@@ -28,7 +30,6 @@ class Dispatcher(BluetoothDispatcher):
 
     # Need to turn on the adapter and obtain permissions, before service is started
     @require_bluetooth_enabled
-    @require_runtime_permissions
     def start_service(self):
         self.service.start(self.activity, "")
         App.get_running_app().stop()  # Can close the app, service will continue to run
@@ -38,7 +39,6 @@ class Dispatcher(BluetoothDispatcher):
 
 
 class ServiceApp(App):
-
     def build(self):
         self.ble_dispatcher = Dispatcher()
         return Builder.load_string(kv)

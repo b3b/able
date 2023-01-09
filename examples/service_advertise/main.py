@@ -1,5 +1,5 @@
 """Start advertising service."""
-from able import BluetoothDispatcher, require_bluetooth_enabled
+from able import BluetoothDispatcher, Permission, require_bluetooth_enabled
 from jnius import autoclass
 from kivy.app import App
 from kivy.lang import Builder
@@ -17,10 +17,9 @@ BoxLayout:
 
 
 class Dispatcher(BluetoothDispatcher):
-
     @property
     def service(self):
-        return autoclass("test.able.service.ServiceAble")
+        return autoclass("test.able.advservice.ServiceAble")
 
     @property
     def activity(self):
@@ -32,7 +31,7 @@ class Dispatcher(BluetoothDispatcher):
         self.service.start(
             self.activity,
             # Pass UUID to advertise
-            "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+            "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
         )
         App.get_running_app().stop()  # Can close the app, service will continue running
 
@@ -41,9 +40,15 @@ class Dispatcher(BluetoothDispatcher):
 
 
 class ServiceApp(App):
-
     def build(self):
-        self.ble_dispatcher = Dispatcher()
+        self.ble_dispatcher = Dispatcher(
+            # This app does not use device scanning,
+            # so the list of required permissions can be reduced
+            runtime_permissions=[
+                Permission.BLUETOOTH_CONNECT,
+                Permission.BLUETOOTH_ADVERTISE,
+            ]
+        )
         return Builder.load_string(kv)
 
 
