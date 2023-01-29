@@ -7,6 +7,8 @@ Alert
 .. literalinclude:: ./examples/alert.py
    :language: python
 
+Full example code: `alert <https://github.com/b3b/able/blob/master/examples/alert/>`_
+
 
 Change MTU
 ----------
@@ -171,4 +173,13 @@ Advertising service
 .. literalinclude:: ./examples/service_advertise_service.py
    :language: python
 
-Full example code: `service_advertice <https://github.com/b3b/able/blob/master/examples/service_advertise/>`_
+Full example code: `service_advertise <https://github.com/b3b/able/blob/master/examples/service_advertise/>`_
+
+
+Connect to multiple devices
+---------------------------
+
+.. literalinclude:: ./examples/multi_devices/main.py
+   :language: python
+
+Full example code: `multi_devices <https://github.com/b3b/able/blob/master/examples/multi_devices/>`_
