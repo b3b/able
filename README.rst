@@ -68,5 +68,7 @@ Thanks,
     `juasiepo <https://github.com/juasiepo>`_
     `PapoKarlo <https://github.com/PapoKarlo>`_
     `RoberWare <https://github.com/RoberWare>`_
+    `Rowataro <https://github.com/Rowataro>`_
     `robgar2001 <https://github.com/robgar2001>`_
+    `sodef <https://github.com/sodef>`_
     `sooko_io <https://github.com/sooko>`_

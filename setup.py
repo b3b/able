@@ -1,4 +1,6 @@
 import os
+import re
+import shutil
 from pathlib import Path
 from setuptools import setup, convert_path
 from setuptools.command.install import install
@@ -22,6 +24,7 @@ class PathParser:
                 "Please report issue to: https://github.com/b3b/able/issues"
             )
         path = path / self.distribution_name
+        print(f"Java classes directory found: '{path}'.")
         path.mkdir(parents=True, exist_ok=True)
         return path
 
@@ -35,6 +38,7 @@ class PathParser:
                     "Please report issue to: https://github.com/b3b/able/issues"
                 )
             path = path.parent
+        print(f"Distribution name found: '{path.name}'.")
         return path.name
 
     @property
@@ -55,7 +59,12 @@ class PathParser:
 
     @property
     def python_path(self):
-        return Path(os.environ["PYTHONPATH"].split(":")[-1])
+        cppflags = os.environ["CPPFLAGS"]
+        print(f"Searching for Python install directory in CPPFLAGS: '{cppflags}'")
+        match = re.search(r"-I(/[^\s]+/build/python-installs/[^/\s]+/)", cppflags)
+        if not match:
+            raise Exception("Can't find Python install directory.")
+        return Path(match.group(1))
 
 
 class InstallRecipe(install):
@@ -72,17 +81,13 @@ class InstallRecipe(install):
         # Find Java classes target directory from the environment
         javaclass_dir = str(PathParser().javaclass_dir)
 
-        self.distribution.data_files = [
-            (
-                javaclass_dir,
-                [
-                    "able/src/org/able/BLE.java",
-                    "able/src/org/able/BLEAdvertiser.java",
-                    "able/src/org/able/PythonBluetooth.java",
-                    "able/src/org/able/PythonBluetoothAdvertiser.java",
-                ],
-            ),
-        ]
+        for java_file in (
+            "able/src/org/able/BLE.java",
+            "able/src/org/able/BLEAdvertiser.java",
+            "able/src/org/able/PythonBluetooth.java",
+            "able/src/org/able/PythonBluetoothAdvertiser.java",
+        ):
+            shutil.copy(java_file, javaclass_dir)
 
         install.run(self)
 

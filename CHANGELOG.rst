@@ -1,6 +1,11 @@
 Changelog
 =========
 
+1.0.13
+------
+
+* Fixed build failure when pip isolated environment is used `#38 <https://github.com/b3b/able/issues/38>`_
+
 1.0.12
 ------
 
