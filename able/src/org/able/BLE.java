@@ -2,6 +2,8 @@ package org.able;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.bluetooth.BluetoothAdapter;
@@ -66,6 +68,7 @@ public class BLE {
                 final BluetoothManager bluetoothManager =
                         (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
                 mBluetoothAdapter = bluetoothManager.getAdapter();
+                mContext.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
         }
 
         public BluetoothAdapter getAdapter(int EnableBtCode) {
@@ -170,6 +173,18 @@ public class BLE {
                         mBluetoothGatt = null;
                 }
         }
+
+        private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+                        Log.d(TAG, "onReceive - BluetoothAdapter state changed");
+                        int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1);
+                        mPython.on_bluetooth_adapter_state_change(state);
+                }
+                }
+        };
 
         private final BluetoothGattCallback mGattCallback =
                 new BluetoothGattCallback() {
