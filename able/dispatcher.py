@@ -29,6 +29,7 @@ class BluetoothDispatcherBase(EventDispatcher):
         "on_scan_completed",
         "on_services",
         "on_connection_state_change",
+        "on_bluetooth_adapter_state_change",
         "on_characteristic_changed",
         "on_characteristic_read",
         "on_characteristic_write",
@@ -278,6 +279,13 @@ class BluetoothDispatcherBase(EventDispatcher):
         :param state: STATE_CONNECTED or STATE_DISCONNECTED
         """
         pass
+
+    def on_bluetooth_adapter_state_change(self, state):
+        """`bluetooth_adapter_state_change` event handler
+            Allows the user to detect when bluetooth adapter is turned on/off.
+
+        :param state: STATE_OFF, STATE_TURNING_OFF, STATE_ON, STATE_TURNING_ON
+        """
 
     def on_services(self, services, status):
         """`services` event handler

@@ -34,7 +34,6 @@ class PythonBluetooth(PythonJavaClass):
                 device
             )
 
-
     @java_method('(Z)V')
     def on_scan_started(self, success):
         Logger.debug("on_scan_started")
@@ -50,6 +49,11 @@ class PythonBluetooth(PythonJavaClass):
         Logger.debug("on_connection_state_change status={} state: {}".format(
             status, state))
         self.dispatcher.dispatch('on_connection_state_change', status, state)
+
+    @java_method('(I)V')
+    def on_bluetooth_adapter_state_change(self, state):
+        Logger.debug("on_bluetooth_adapter_state_change state: {}".format(state))
+        self.dispatcher.dispatch('on_bluetooth_adapter_state_change', state)
 
     @java_method('(ILjava/util/List;)V')
     def on_services(self, status, services):
