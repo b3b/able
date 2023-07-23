@@ -2,15 +2,15 @@ import os
 import re
 import shutil
 from pathlib import Path
-from setuptools import setup, convert_path
+from setuptools import setup
 from setuptools.command.install import install
 
 
 main_ns = {}
-with open(convert_path("able/version.py")) as ver_file:
+with Path("able/version.py").open() as ver_file:
     exec(ver_file.read(), main_ns)
 
-with open(convert_path("README.rst")) as readme_file:
+with Path("README.rst").open() as readme_file:
     long_description = readme_file.read()
 
 
