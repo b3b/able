@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.0.14
+------
+
+* Added event handler for bluetooth adapter state change
+  `#39 <https://github.com/b3b/able/pull/39>`_ by `robgar2001 <https://github.com/robgar2001>`_
+* Removal of deprecated `convert_path` from setup script
+
 1.0.13
 ------
 

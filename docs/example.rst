@@ -57,6 +57,13 @@ Scan filters
   ])
 
 
+Adapter state
+-------------
+
+.. literalinclude:: ./examples/adapter_state_change.py
+   :language: python
+
+
 Advertising
 -----------
 

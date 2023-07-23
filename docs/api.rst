@@ -32,6 +32,7 @@ BluetoothDispatcher
              on_scan_started,
              on_scan_completed,
              on_device,
+             on_bluetooth_adapter_state_changeable,
              on_connection_state_change,
              on_services,
              on_characteristic_changed,
@@ -67,6 +68,9 @@ Constants
 .. autodata:: GATT_SUCCESS
 .. autodata:: STATE_CONNECTED
 .. autodata:: STATE_DISCONNECTED
+.. autoclass:: AdapterState
+   :members:
+   :member-order: bysource
 .. autoclass:: WriteType
    :members:
 
