@@ -2,7 +2,7 @@
 """
 import time
 
-from able import GATT_SUCCESS, BluetoothDispatcher
+from able import AdapterState, GATT_SUCCESS, BluetoothDispatcher
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.config import Config
@@ -20,6 +20,7 @@ class MainLayout(BoxLayout):
 
 class BLETestApp(App):
     ble = BluetoothDispatcher()
+    adapter_state = StringProperty('')
     state = StringProperty('')
     test_string = StringProperty('')
     rssi = StringProperty('')
@@ -64,6 +65,7 @@ class BLETestApp(App):
         self.ble.bind(on_device=self.on_device)
         self.ble.bind(on_scan_started=self.on_scan_started)
         self.ble.bind(on_scan_completed=self.on_scan_completed)
+        self.ble.bind(on_bluetooth_adapter_state_change=self.on_bluetooth_adapter_state_change)
         self.ble.bind(
             on_connection_state_change=self.on_connection_state_change)
         self.ble.bind(on_services=self.on_services)
@@ -126,6 +128,9 @@ class BLETestApp(App):
             'counter_reset': self.services.search(
                 self.uids['counter_reset']),
         }
+
+    def on_bluetooth_adapter_state_change(self, ble, state):
+        self.adapter_state = AdapterState(state).name
 
     def read_rssi(self):
         self.rssi = '...'
