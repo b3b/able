@@ -16,10 +16,23 @@ STATE_CONNECTED = 2  #: The profile is in connected state
 STATE_DISCONNECTED = 0  #: The profile is in disconnected state
 
 
+class AdapterState(IntEnum):
+    """Bluetooth adapter state constants.
+    https://developer.android.com/reference/android/bluetooth/BluetoothAdapter#STATE_OFF
+    """
+
+    OFF = 10  #: Adapter is off
+    TURNING_ON = 11  #: Adapter is turning on
+    ON = 12  #: Adapter is on
+    TURNING_OFF = 13  #: Adapter is turning off
+
+
 class WriteType(IntEnum):
     """GATT characteristic write types constants."""
 
-    DEFAULT = 2  #: Write characteristic, requesting acknoledgement by the remote device
+    DEFAULT = (
+        2  #: Write characteristic, requesting acknowledgement by the remote device
+    )
     NO_RESPONSE = (
         1  #: Write characteristic without requiring a response by the remote device
     )
