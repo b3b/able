@@ -1,4 +1,5 @@
-from jnius import autoclass
+from jnius import JavaException, autoclass
+from kivy.logger import Logger
 
 from able.adapter import (
     AdapterManager,
@@ -11,7 +12,15 @@ from able.scan_settings import ScanSettingsBuilder
 
 ArrayList = autoclass("java.util.ArrayList")
 
-BLE = autoclass("org.able.BLE")
+try:
+    BLE = autoclass("org.able.BLE")
+except:
+    Logger.error(
+        "able_recipe: Failed to load Java class org.able.BLE. Possible build error."
+    )
+    raise
+else:
+    Logger.info("able_recipe: org.able.BLE Java class loaded")
 
 BluetoothAdapter = autoclass("android.bluetooth.BluetoothAdapter")
 BluetoothDevice = autoclass("android.bluetooth.BluetoothDevice")
