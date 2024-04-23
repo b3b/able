@@ -123,4 +123,11 @@ setup(
     cmdclass={
         "install": InstallRecipe,
     },
+    options={
+        "bdist_wheel": {
+            # Changing the wheel name
+            # to avoid installing a package from cache.
+            "plat_name": "unused-nocache",
+        },
+    },
 )

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.15
+------
+
+* Changing the wheel name to avoid installing a package from cache
+  `#40 <https://github.com/b3b/able/issues/40>`_
+
 1.0.14
 ------
 

@@ -66,9 +66,11 @@ Thanks,
     `HelaFaye <https://github.com/HelaFaye>`_
     `jacklinquan <https://github.com/jacklinquan>`_
     `juasiepo <https://github.com/juasiepo>`_
+    `MininDMhvh <https://github.com/MininDMhvh>`_
     `PapoKarlo <https://github.com/PapoKarlo>`_
     `RoberWare <https://github.com/RoberWare>`_
     `Rowataro <https://github.com/Rowataro>`_
     `robgar2001 <https://github.com/robgar2001>`_
     `sodef <https://github.com/sodef>`_
     `sooko_io <https://github.com/sooko>`_
+    `woutersj <https://github.com/woutersj>`_
