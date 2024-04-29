@@ -106,8 +106,7 @@ class AdapterManager:
 
     def check_permissions(self):
         return all(
-            [check_permission(permission) for permission in self.runtime_permissions]
-        )
+            check_permission(permission) for permission in self.runtime_permissions)
 
     def request_permissions(self):
         if self.is_permissions_requested:
