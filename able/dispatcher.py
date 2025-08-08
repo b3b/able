@@ -150,18 +150,25 @@ class BluetoothDispatcherBase(EventDispatcher):
         """Stop the ongoing scan for devices."""
         pass
 
-    def connect_by_device_address(self, address: str):
+    def connect_by_device_address(self, address: str, autoconnect: bool = False):
         """Connect to GATT Server of the device with a given Bluetooth hardware address, without scanning.
 
         :param address: Bluetooth hardware address string in "XX:XX:XX:XX:XX:XX" format
+        :param autoconnect: If True, automatically reconnects when available.
+                            False = direct connect (default).
         :raises:
             ValueError: if `address` is not a valid Bluetooth address
         """
         pass
 
-    def connect_gatt(self, device):
-        """Connect to GATT Server hosted by device"""
-        self._ble.connectGatt(device)
+    def connect_gatt(self, device, autoconnect: bool = False):
+        """Connect to GATT Server hosted by device
+
+        :param device: BluetoothDevice Java object
+        :param autoconnect: If True, automatically reconnects when available.
+                            False = direct connect (default).
+        """
+        self._ble.connectGatt(device, autoconnect)
 
     def close_gatt(self):
         """Close current GATT client"""

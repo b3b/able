@@ -106,6 +106,20 @@
                     on_press: Factory.ConnectByMACDialog().open()
 
             BoxLayout:
+                id: queue_box
+                orientation: 'vertical'
+                size_hint_y: .15
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Caption:
+                        text: 'Enable GATT autoconnect:'
+                    CheckBox:
+                        id: timeout_checkbox
+                        active: app.autoconnect
+                        on_active: app.autoconnect = self.active
+
+            BoxLayout:
                 orientation: 'horizontal'
                 size_hint_y: .2
                 spacing: 10

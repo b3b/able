@@ -68,13 +68,13 @@ class BluetoothDispatcher(BluetoothDispatcherBase):
         self._ble.stopScan()
 
     @require_bluetooth_enabled
-    def connect_by_device_address(self, address: str):
+    def connect_by_device_address(self, address: str, autoconnect: bool = False):
         address = address.upper()
         if not BluetoothAdapter.checkBluetoothAddress(address):
             raise ValueError(f"{address} is not a valid Bluetooth address")
         adapter = self.adapter
         if adapter:
-            self.connect_gatt(adapter.getRemoteDevice(address))
+            self.connect_gatt(adapter.getRemoteDevice(address), autoconnect)
 
     @require_bluetooth_enabled
     def enable_notifications(self, characteristic, enable=True, indication=False):

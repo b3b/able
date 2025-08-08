@@ -36,6 +36,7 @@ class BLETestApp(App):
     queue_timeout = StringProperty('1000')
     device_name = StringProperty('KivyBLETest')
     device_address = StringProperty('')
+    autoconnect = BooleanProperty(False)
 
     store = JsonStore('bletestapp.json')
 
@@ -87,7 +88,10 @@ class BLETestApp(App):
         self.state = 'try_connect'
         self.ble.close_gatt()
         try:
-            self.ble.connect_by_device_address(self.device_address)
+            self.ble.connect_by_device_address(
+                self.device_address,
+                autoconnect=self.autoconnect,
+            )
         except ValueError as exc:
             self.state = str(exc)
 
@@ -104,7 +108,10 @@ class BLETestApp(App):
 
     def on_scan_completed(self, ble):
         if self.device:
-            self.ble.connect_gatt(self.device)
+            self.ble.connect_gatt(
+                self.device,
+                autoconnect=self.autoconnect,
+            )
 
     def on_connection_state_change(self, ble, status, state):
         if status == GATT_SUCCESS:

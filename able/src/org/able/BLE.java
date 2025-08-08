@@ -158,9 +158,13 @@ public class BLE {
                 };
 
         public void connectGatt(BluetoothDevice device) {
+                connectGatt(device, false);
+        }
+
+        public void connectGatt(BluetoothDevice device, boolean autoConnect) {
                 Log.d(TAG, "connectGatt");
                 if (mBluetoothGatt == null) {
-                        mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback, BluetoothDevice.TRANSPORT_LE);
+                        mBluetoothGatt = device.connectGatt(mContext, autoConnect, mGattCallback, BluetoothDevice.TRANSPORT_LE);
                 } else {
                         Log.d(TAG, "BluetoothGatt object exists, use either closeGatt() to close Gatt or BluetoothGatt.connect() to re-connect");
                 }

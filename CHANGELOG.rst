@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.0.16
+------
+
+* Added `autoconnect` parameter to connection methods
+  `#45 <https://github.com/b3b/able/issues/45>`_
+
 1.0.15
 ------
 

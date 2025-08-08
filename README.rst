@@ -68,6 +68,7 @@ Thanks,
     `juasiepo <https://github.com/juasiepo>`_
     `MininDMhvh <https://github.com/MininDMhvh>`_
     `PapoKarlo <https://github.com/PapoKarlo>`_
+    `quasarsuport-del <https://github.com/quasarsuport-del>`_
     `RoberWare <https://github.com/RoberWare>`_
     `Rowataro <https://github.com/Rowataro>`_
     `robgar2001 <https://github.com/robgar2001>`_
