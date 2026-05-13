@@ -1,41 +1,60 @@
+name: Release Python package
+
 on:
   push:
     tags:
-      - '*'
+      - "[0-9]*.[0-9]*.[0-9]*"
+
+concurrency:
+  group: release-python-${{ github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   release:
+    name: Release sdist to PyPI
     runs-on: ubuntu-22.04
     steps:
-      - uses: "actions/checkout@v3"
+      - name: Checkout commit
+        uses: actions/checkout@v4
 
-      - name: Get the version
-        id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade "pip>=25.1"
+          python -m pip install --group dev
 
       - name: Update version from tag
         run: |
+          VERSION="${GITHUB_REF_NAME}"
           echo "Version is: ${VERSION}"
-          test -n "${VERSION}"
+          [[ "${VERSION}" =~ ^[0-9]+[.][0-9]+[.][0-9]+$ ]]
           echo "__version__ = \"${VERSION}\"" > able/version.py
 
-      - name: Set up Python
-        uses: "actions/setup-python@v4"
-        with:
-          python-version: "3.7.17"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install wheel twine
-      - name: Build package
-        run: python setup.py sdist
-      - name: List result
-        run: ls -l dist
-      - name: Check distribution
-        run: python -m twine check dist/*
+      - name: Run tests
+        run: python -m pytest -q
 
-      - name: Upload package to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: twine upload dist/*
+      - name: Build sdist
+        run: python -m build --sdist
+
+      - name: Check sdist
+        run: python -m twine check dist/*.tar.gz
+
+      - name: Upload sdist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: able-recipe-sdist
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+      - name: Publish sdist to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
+          password: ${{ secrets.PYPI_TOKEN }}
