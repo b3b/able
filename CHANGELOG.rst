@@ -1,6 +1,17 @@
 Changelog
 =========
 
+1.0.17
+------
+
+* Updated packaging for Buildozer/python-for-android 2026.05.09 and
+  Python 3.14
+* Added Java source installation to the p4a wheel-build hook, so Able Java
+  files are copied into p4a `javaclasses` when newer p4a builds a wheel
+  before installing
+* Added modern `pyproject.toml` package metadata
+* Changed the declared minimum Python version to 3.9
+
 1.0.16
 ------
 

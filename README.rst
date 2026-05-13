@@ -52,18 +52,20 @@ path to *able* recipes directory should be set in buildozer.spec::
 Contributors
 ------------
 
-Thanks,
+Thanks to everyone who helped improve *able*:
 
 .. csv-table::
 
-    `andfmart <https://github.com/andfmart>`_
+    `331319341 <https://github.com/331319341>`_
+    `andmart <https://github.com/andmart>`_
     `andreamerello <https://github.com/andreamerello>`_
-    `datmaniac95  <https://github.com/datmaniac95>`_
+    `datmaniac95 <https://github.com/datmaniac95>`_
     `dgatf <https://github.com/dgatf>`_
     `dwmoffatt <https://github.com/dwmoffatt>`_
     `Enkumicahel <https://github.com/Enkumicahel>`_
     `hailesir <https://github.com/hailesir>`_
     `HelaFaye <https://github.com/HelaFaye>`_
+    `ilw <https://github.com/ilw>`_
     `jacklinquan <https://github.com/jacklinquan>`_
     `juasiepo <https://github.com/juasiepo>`_
     `MininDMhvh <https://github.com/MininDMhvh>`_
@@ -73,5 +75,6 @@ Thanks,
     `Rowataro <https://github.com/Rowataro>`_
     `robgar2001 <https://github.com/robgar2001>`_
     `sodef <https://github.com/sodef>`_
-    `sooko_io <https://github.com/sooko>`_
+    `sooko <https://github.com/sooko>`_
+    `ujur007 <https://github.com/ujur007>`_
     `woutersj <https://github.com/woutersj>`_
