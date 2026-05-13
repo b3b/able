@@ -1,0 +1,110 @@
+name: BLE test APK integration
+run-name: BLE test APK integration (${{ github.ref_name }})
+
+on:
+  # Long-running opt-in workflow for validating testapps/bletest with p4a/Buildozer.
+  workflow_dispatch:
+  push:
+    branches:
+      - "bletest/**"
+
+permissions:
+  contents: read
+
+env:
+  BUILDOZER_BUILD_LOG: buildozer-build.log
+
+jobs:
+  bletest-apk-integration:
+    name: Build testapps/bletest APK
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v4
+
+      - name: Build bletest requirements for tested commit
+        id: bletest-requirements
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python scripts/release/replace_buildozer_requirement.py \
+            testapps/bletest/buildozer.spec \
+            able_recipe \
+            "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/archive/${GITHUB_SHA}.zip"
+
+      - name: Build Android APK with Buildozer Docker image
+        shell: bash
+        run: |
+          set -o pipefail
+
+          echo "APP_REQUIREMENTS=${{ steps.bletest-requirements.outputs.requirements }}"
+
+          docker run --rm \
+            -e APP_REQUIREMENTS="${{ steps.bletest-requirements.outputs.requirements }}" \
+            -v "$PWD":/home/user/hostcwd \
+            -w /home/user/hostcwd/testapps/bletest \
+            kivy/buildozer:latest \
+            android debug 2>&1 | tee "$BUILDOZER_BUILD_LOG"
+
+      - name: Find APK
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          apk="$(find testapps/bletest/bin -name '*.apk' -type f | head -n 1)"
+
+          if [[ -z "$apk" ]]; then
+            echo "::error::No APK found"
+            exit 1
+          fi
+
+          cp "$apk" bletest.apk
+
+          echo "APK: $apk"
+          ls -lh bletest.apk
+          sha256sum bletest.apk
+          unzip -t bletest.apk
+
+      - name: Check ABLE classes in APK
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          dex_strings="$(mktemp)"
+          while IFS= read -r dex; do
+            unzip -p bletest.apk "$dex" | strings
+          done < <(unzip -Z1 bletest.apk 'classes*.dex') > "$dex_strings"
+
+          grep -F "Lorg/able/BLE;" "$dex_strings"
+          grep -F "Lorg/able/BLEAdvertiser;" "$dex_strings"
+          grep -F "Lorg/able/PythonBluetooth;" "$dex_strings"
+          grep -F "Lorg/able/PythonBluetoothAdvertiser;" "$dex_strings"
+
+      - name: Check ABLE packaging hooks
+        run: |
+          grep -E "\[able\] installed .*/BLE\.java -> " "$BUILDOZER_BUILD_LOG"
+          grep -E "\[able\] installed .*/BLEAdvertiser\.java -> " "$BUILDOZER_BUILD_LOG"
+          grep -E "\[able\] installed .*/PythonBluetooth\.java -> " "$BUILDOZER_BUILD_LOG"
+          grep -E "\[able\] installed .*/PythonBluetoothAdvertiser\.java -> " "$BUILDOZER_BUILD_LOG"
+          grep -F "# Android packaging done!" "$BUILDOZER_BUILD_LOG"
+          grep -E "# APK .+ available in the bin directory" "$BUILDOZER_BUILD_LOG"
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: able-bletest-apk
+          path: bletest.apk
+          if-no-files-found: error
+          retention-days: 8
+
+      - name: Upload Buildozer build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bletest-build-log
+          path: ${{ env.BUILDOZER_BUILD_LOG }}
+          if-no-files-found: ignore
+          retention-days: 8
