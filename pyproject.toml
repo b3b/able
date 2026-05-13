@@ -1,0 +1,58 @@
+[project]
+name = "able_recipe"
+dynamic = ["version"]
+description = "Bluetooth Low Energy for Android"
+readme = "README.rst"
+requires-python = ">=3.9"
+license = "MIT"
+authors = [
+    {name = "b3b", email = "ash.b3b@gmail.com"},
+]
+keywords = ["android", "ble", "bluetooth", "kivy", "python-for-android", "buildozer"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Operating System :: Android",
+    "Topic :: System :: Networking",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "build",
+    "kivy",
+    "mock",
+    "pytest",
+    "pytest-mock",
+    "setuptools",
+    "twine",
+]
+
+[project.urls]
+Source = "https://github.com/b3b/able"
+Changelog = "https://github.com/b3b/able/blob/master/CHANGELOG.rst"
+Issues = "https://github.com/b3b/able/issues"
+
+[build-system]
+requires = ["setuptools>=70.1", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = {attr = "able.version.__version__"}
+
+[tool.setuptools]
+packages = ["able", "able.android"]
+include-package-data = false
+
+[tool.setuptools.package-data]
+able = ["src/org/able/*.java"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
